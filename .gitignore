@@ -1,0 +1,10 @@
+# macOS junk
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# editor / temp
+*.swp
+*~
+~$*

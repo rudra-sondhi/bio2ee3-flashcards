@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#7B1F2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BIO 2EE3">
+<meta name="description" content="Free interactive microbiology flashcards for BIO 2EE3 — Chapters 1 & 2. Anki-style spaced review, fill-in-the-blanks, diagram labelling, and past quiz questions.">
+<title>BIO 2EE3 — Microbiology Flashcards</title>
+<style>
+  :root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;
+        --ink:#1c1c1c;--muted:#6b6b6b;--green:#1E7A34;--amber:#8A6D00;--line:#e2ddd5;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+       background:var(--bg);color:var(--ink);padding:34px 16px 60px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto}
+  header{text-align:center;margin-bottom:26px}
+  h1{color:var(--maroon);margin:0 0 6px;font-size:30px;line-height:1.2}
+  .sub{color:var(--steel);font-weight:600;font-size:16px}
+  .tiny{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6}
+  .decks{display:grid;gap:16px;grid-template-columns:1fr}
+  @media(min-width:640px){.decks{grid-template-columns:1fr 1fr}}
+  a.deck{display:block;text-decoration:none;color:inherit;background:var(--card);
+         border:1px solid var(--line);border-radius:16px;padding:22px 20px 20px;
+         box-shadow:0 6px 20px rgba(0,0,0,.06);transition:transform .12s,box-shadow .12s,border-color .12s}
+  a.deck:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.10);border-color:var(--steel)}
+  .ch{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:#fff;background:var(--maroon);padding:4px 10px;border-radius:99px;margin-bottom:10px}
+  .ch.two{background:var(--steel)}
+  a.deck h2{margin:0 0 6px;font-size:21px;color:var(--maroon)}
+  a.deck.two h2{color:var(--steel)}
+  .count{font-size:13.5px;font-weight:700;color:var(--green);margin-bottom:8px}
+  .desc{font-size:14px;line-height:1.55;color:var(--ink);margin:0 0 12px}
+  .tags{display:flex;flex-wrap:wrap;gap:5px}
+  .tag{font-size:11.5px;background:#f2ede5;border:1px solid var(--line);color:var(--steel);
+       border-radius:99px;padding:3px 9px;font-weight:600}
+  .go{margin-top:14px;font-size:14px;font-weight:700;color:var(--maroon)}
+  a.deck.two .go{color:var(--steel)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
+         padding:20px 22px;margin-top:22px;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+  .panel h3{margin:0 0 10px;font-size:16px;color:var(--maroon)}
+  .panel ul{margin:0;padding-left:20px;font-size:14px;line-height:1.75}
+  .panel li b{color:var(--steel)}
+  .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;line-height:1.7}
+  kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>BIO 2EE3 — Microbiology Flashcards</h1>
+    <div class="sub">Interactive study decks · Chapters 1 &amp; 2</div>
+    <div class="tiny">Free · no login · works offline once loaded · your progress saves on your own device</div>
+  </header>
+
+  <div class="decks">
+    <a class="deck" href="ch1.html">
+      <span class="ch">Chapter 1</span>
+      <h2>The Microbial World</h2>
+      <div class="count">65 cards</div>
+      <p class="desc">Timeline of life, the history figures, the three domains, macromolecules, the origin of life, endosymbiosis, and germ theory.</p>
+      <div class="tags"><span class="tag">Flip cards</span><span class="tag">★ Priority</span><span class="tag">Subchapter stats</span></div>
+      <div class="go">Start studying →</div>
+    </a>
+
+    <a class="deck two" href="ch2.html">
+      <span class="ch two">Chapter 2</span>
+      <h2>Bacteria</h2>
+      <div class="count">110 cards</div>
+      <p class="desc">Morphology, cytoplasm, cytoskeleton, the cell envelope (Gram ±, LPS, transport), cell surface, and taxonomy — plus every question from the Week 1 quiz.</p>
+      <div class="tags"><span class="tag">Anki grading</span><span class="tag">✏️ Fill-in</span><span class="tag">📊 Tables</span><span class="tag">🏷️ Labelling</span><span class="tag">📝 Past quiz</span></div>
+      <div class="go">Start studying →</div>
+    </a>
+  </div>
+
+  <div class="panel">
+    <h3>How to use these</h3>
+    <ul>
+      <li><b>Rate honestly.</b> Chapter 2 uses Anki-style grading — <b>Again / Hard / Good / Easy</b>. Cards you find hard come back sooner; a card is "mastered" at level 4.</li>
+      <li><b>Filter to what you need.</b> Use the chips at the top: <b>★ Priority</b> for the prof-flagged testable items, <b>📝 Past Quiz</b> to drill the real quiz questions, or pick a single subchapter.</li>
+      <li><b>Type your answers.</b> Fill-in-the-blank and table cards have real input boxes — type, hit <b>Check</b>, and get marked instantly.</li>
+      <li><b>Label the diagrams.</b> On labelling cards the labels are covered — name each number, then Reveal.</li>
+      <li><b>Keyboard:</b> <kbd>Space</kbd> flip · <kbd>1</kbd>–<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>T</kbd> stats.</li>
+      <li><b>On your phone:</b> open this page, then <b>Share → Add to Home Screen</b> for an app icon.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Built from the BIO 2EE3 lecture slides + lectures (Wessner, Dupont, Charles &amp; Neufeld, <i>Microbiology</i>, 3rd ed.).<br>
+    Study aid only — always defer to your lecture material. Good luck out there. 🦠
+  </div>
+</div>
+</body>
+</html>
