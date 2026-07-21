@@ -1,7 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#7B1F2B">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>BIO 2EE3 — Chapter 3 Flashcards</title>
 <style>
 :root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
@@ -98,7 +96,6 @@ kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6p
 .pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
 .empty{color:var(--muted);font-style:italic;padding:10px 0}
 </style></head><body><div class="wrap">
-  <div style="margin-bottom:10px"><a class="hublink" href="index.html" style="text-decoration:none;color:#4E6478;font-size:13px;font-weight:600">← All BIO 2EE3 decks</a></div>
 <header><h1>Chapter 3 — Eukaryal Microbes</h1><div class="sub">BIO 2EE3 · Flashcards</div>
 <div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
 ✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
@@ -116,18 +113,18 @@ kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6p
 <button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
 <button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
 <div class="grades" id="grades">
-<button class="g-again" onclick="grade('again',event)">Again<small>&lt;1m · <kbd>1</kbd></small></button>
-<button class="g-hard" onclick="grade('hard',event)">Hard<small>soon · <kbd>2</kbd></small></button>
-<button class="g-good" onclick="grade('good',event)">Good<small>+1 · <kbd>3</kbd></small></button>
-<button class="g-easy" onclick="grade('easy',event)">Easy<small>done · <kbd>4</kbd></small></button></div>
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
 <div class="controls">
 <button class="act" onclick="shuffle()">🔀 Shuffle</button>
 <button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
-<button class="act" onclick="resetSession()">↻ Restart deck</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
 <button class="act" onclick="doSync()">☁ Sync</button>
 <button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
 <div id="statsView"><div class="panel"><h2>Your stats</h2>
-<div class="tiny">A card is <b>mastered</b> at <b>level 4</b> (built via Good/Easy). Level resets to 0 on “Again”.</div>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
 <div class="overall" id="overall"></div>
 <div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
 <div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
@@ -171,7 +168,7 @@ async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");co
 function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
 function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
 function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
-function st(i){let k=key(i);if(!stats[k])stats[k]={lvl:0,again:0,hard:0,good:0,easy:0};return stats[k]}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
 function isMastered(i){return st(i).lvl>=MASTER}
 const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
 function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
@@ -185,7 +182,8 @@ function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
  if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
  if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
 function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
- idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);queue=idx;pos=0;flipped=false;checked=false}
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
 
 function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
  const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
@@ -206,7 +204,8 @@ function buildFilters(){const f=$("filters");f.innerHTML="";
 function esc(s){return s}
 function render(){
  const card=$("card"), body=id=>document.getElementById(id);
- if(queue.length===0){card.className="card";card.innerHTML='<div class="done"><h2>✓ Deck clear!</h2><p>No cards in this view'+(hideKnown?" (mastered hidden)":"")+'. Try another filter, <b>↻ Restart deck</b>, or <b>Stats</b>.</p></div>';
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
   $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
  setGrades(true);
  if(pos>=queue.length)pos=0;
@@ -237,11 +236,16 @@ function renderBody(c,i){
  if(c.t==='label') return renderLabel(c);
  if(c.t==='mc') return renderMC(c);
 }
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
 function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
  let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
- c.options.forEach((opt,i)=>{let cls='mcopt';
-  if(checked){if(i===c.ans)cls+=' mccorrect';else if(i===curChoice)cls+=' mcwrong'}
-  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+i+',event)">'+opt+'</button>';});
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
  h+='</div>';
  if(checked){const ok=curChoice===c.ans;
   h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
@@ -312,14 +316,21 @@ function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[
  if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
  if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
  flipped=!flipped;render()}
-let curVals=[],revealed=false,curChoice=null;
-function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
 function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
 function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
 function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
- if(g==='again')s.lvl=0;else if(g==='good')s.lvl=Math.min(5,s.lvl+1);else if(g==='easy')s.lvl=Math.min(5,s.lvl+2);
- save();queue.splice(pos,1);const off={again:3,hard:7,good:14};
- if(g!=='easy'){const ins=Math.min(queue.length,pos+off[g]);queue.splice(ins,0,i)}
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
  if(pos>=queue.length)pos=0;resetView();render()}
 function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
 function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
