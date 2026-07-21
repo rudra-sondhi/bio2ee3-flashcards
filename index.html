@@ -37,6 +37,17 @@
        border-radius:99px;padding:3px 9px;font-weight:600}
   .go{margin-top:14px;font-size:14px;font-weight:700;color:var(--maroon)}
   a.deck.two .go{color:var(--steel)}
+  a.featured{display:block;text-decoration:none;color:inherit;margin-bottom:16px;
+         background:linear-gradient(135deg,#7B1F2B 0%,#9a2b3a 55%,#8A6D00 130%);
+         border:1px solid #6a1a24;border-radius:18px;padding:22px 24px 20px;
+         box-shadow:0 10px 30px rgba(123,31,43,.28);transition:transform .12s,box-shadow .12s}
+  a.featured:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(123,31,43,.36)}
+  a.featured .ch{background:#ffd23f;color:#5a2b00}
+  a.featured h2{margin:0 0 6px;font-size:24px;color:#fff}
+  a.featured .count{color:#ffe08a}
+  a.featured .desc{color:#f6ecec;margin-bottom:12px}
+  a.featured .tag{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#fff}
+  a.featured .go{color:#fff}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;
          padding:20px 22px;margin-top:22px;box-shadow:0 4px 14px rgba(0,0,0,.05)}
   .panel h3{margin:0 0 10px;font-size:16px;color:var(--maroon)}
@@ -50,9 +61,18 @@
 <div class="wrap">
   <header>
     <h1>BIO 2EE3 — Microbiology Flashcards</h1>
-    <div class="sub">Interactive study decks · Chapters 1 &amp; 2</div>
+    <div class="sub">Interactive study decks · Chapters 1–5</div>
     <div class="tiny">Free · no login · works offline once loaded · your progress saves on your own device</div>
   </header>
+
+  <a class="featured" href="cram.html">
+    <span class="ch">⚡ Start here for the midterm</span>
+    <h2>Midterm Cram · All 5 Chapters</h2>
+    <div class="count">146 high-yield cards</div>
+    <p class="desc">The ~40% that carries the exam. Hand-picked from what the prof actually flagged out loud, every real quiz &amp; clicker question, and the concepts he tests every year — so you can cover all five chapters in two nights instead of 384 cards. Filter by chapter, or hit <b>★ Priority</b> for just the things he said out loud.</p>
+    <div class="tags"><span class="tag">📝 55 real quiz/clicker Qs</span><span class="tag">★ Priority filter</span><span class="tag">Per-chapter chips</span><span class="tag">🎓 Midterm mode</span></div>
+    <div class="go">Cram now →</div>
+  </a>
 
   <div class="decks">
     <a class="deck" href="ch1.html">
