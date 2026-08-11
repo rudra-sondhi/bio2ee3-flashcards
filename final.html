@@ -58,6 +58,9 @@ a.featured .count{color:#ffe08a}
 a.featured .desc{color:#f6ecec;margin-bottom:12px}
 a.featured .tag{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#fff}
 a.featured .go{color:#fff}
+  a.featured.official{background:linear-gradient(135deg,#1F4E79 0%,#2E6E9E 55%,#1F7BB5 130%);border-color:#17395a;box-shadow:0 10px 30px rgba(31,78,121,.28)}
+  a.featured.official:hover{box-shadow:0 16px 40px rgba(31,78,121,.36)}
+  a.featured.official .ch{background:#bfe3ff;color:#0d3454}
   .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;line-height:1.7}
 </style>
 </head>
@@ -67,7 +70,7 @@ a.featured .go{color:#fff}
 
   <header>
     <h1>Final Content</h1>
-    <div class="sub">Post-midterm chapters · 571 cards</div>
+    <div class="sub">Post-midterm chapters · 612 cards</div>
     <div class="tiny">Free · no login · works offline once loaded · your progress saves on your own device</div>
   </header>
 
@@ -86,6 +89,15 @@ a.featured .go{color:#fff}
   </a>
 
   <!-- DECK GRID — new chapter decks get added here -->
+  <a class="featured official" href="practice-exam.html">
+    <span class="ch">📄 Official · released by the prof</span>
+    <h2>Practice Exam — Released Questions</h2>
+    <div class="count">36 cards · 21 real questions + 15 gap-fixers</div>
+    <p class="desc">Every question from <b>both released versions</b> of the practice test, verbatim with the full option list. Each explanation says why the right answer is right — and for the four you missed, why the one you picked was tempting. Filter to <b>✗ Missed</b> to drill those, <b>Form B — new Qs</b> for the eight you have not attempted, or <b>Fix the gap</b> for the underlying concepts.</p>
+    <div class="tags"><span class="tag">✗ 4 missed</span><span class="tag">✓ 9 correct</span><span class="tag">8 new (Form B)</span><span class="tag">Fix the gap</span><span class="tag">★ Priority = your weak spots</span></div>
+    <div class="go">Review the practice exam →</div>
+  </a>
+
   <div class="decks" id="deckGrid">
     <a class="deck" href="metabolism.html">
       <span class="ch">Metabolism</span>
