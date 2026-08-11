@@ -1,0 +1,370 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Metabolism Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>Metabolism — Parts 1 &amp; 2</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Focus: the timeline of life · history figures · the three domains · macromolecules · endosymbiosis · origin of life</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "qa", "q": "Define <b>catabolism</b> and <b>anabolism</b> — briefly, in your own words.", "a": "<b>Catabolism</b> — the breakdown of larger molecules into smaller molecules; it <b>yields</b> energy, often stored in ATP.<br><b>Anabolism</b> — the biosynthesis of macromolecules from smaller molecules; it <b>consumes</b> energy.<br>Together they make up metabolism. <i>He drafted this aloud: “very good candidate for a short answer part… use your own words.” The energy direction is the marking point.</i>", "c": "Energy", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "What is <b>Gibbs free energy (G)</b>?", "a": "A measure of the amount of energy released or consumed in a biochemical reaction, expressed as ΔG. <i>ΔG arithmetic is explicitly NOT examinable — “I'm not going to ask you anything about deltaG calculation.” Learn the signs and the concept.</i>", "c": "Energy", "p": 1, "img": null}, {"t": "qa", "q": "What is <b>activation energy (E<sub>A</sub>)</b>?", "a": "The amount of energy that must be invested for a reaction to occur — the peak the reactants must climb before products can form.", "c": "Energy", "p": 1, "img": null}, {"t": "qa", "q": "An endergonic reaction has a positive ΔG and cannot proceed. How does the cell run one anyway?", "a": "By <b>coupling</b> it to an exergonic reaction — classically <b>ATP hydrolysis</b> (ATP → ADP + P<sub>i</sub>), whose negative ΔG makes the net ΔG negative. <i>“The only thing that you need to just know is those two reactions can be coupled.”</i>", "c": "Energy", "p": 1, "img": null}, {"t": "mc", "q": "Which statement about ΔG is correct?", "options": ["Exergonic reactions have a negative ΔG and yield energy", "Exergonic reactions have a positive ΔG and consume energy", "Endergonic reactions have a negative ΔG and proceed on their own", "Both exergonic and endergonic reactions have a negative ΔG"], "ans": 0, "why": "Exergonic = energy-yielding = negative ΔG, proceeds alone. Endergonic = positive ΔG, cannot proceed unless coupled.", "c": "Energy", "p": 1}, {"t": "fill", "q": "Exergonic reactions have a ____ ΔG and yield energy; endergonic reactions have a ____ ΔG and cannot proceed alone.", "accept": [["negative"], ["positive"]], "c": "Energy", "p": 1}, {"t": "qa", "q": "How do enzymes participate in metabolism? <i>(the bolded slide line)</i>", "a": "Enzymes facilitate biochemical reactions in metabolism by <b>lowering their activation energy</b>. They also dramatically increase the rate of reactions and catalyse <b>specific</b> reactions. <i>He said: “written in bold, this is something that you need to just memorize, plus understand it.”</i>", "c": "Enzymes", "p": 1, "img": null}, {"t": "qa", "q": "Walk through how an enzyme works, from substrate to product.", "a": "Substrate binds the <b>active site</b> → enzyme–substrate complex forms → conformational change → transition-state complex → products released → <b>the enzyme returns to its initial state, ready for another reaction</b>. The enzyme is not consumed — that is the point students drop.", "c": "Enzymes", "p": 1, "img": null}, {"t": "qa", "q": "What is <b>allosteric regulation</b>?", "a": "Enzymes can be regulated — <b>activated OR inhibited</b> — by the binding of <b>effector molecules</b> at an <b>allosteric site</b>, a second site distinct from the active site. <i>“So this is something that you need to know.” Note regulation is not always activation.</i>", "c": "Enzymes", "p": 1, "img": null}, {"t": "qa", "q": "Allosteric <b>activator</b> vs allosteric <b>inhibitor</b> — what does each do?", "a": "<b>Activator</b> — binds the allosteric site so the substrate can be accommodated in the active site; the reaction proceeds.<br><b>Inhibitor</b> — binds and distorts the enzyme so the substrate can no longer be accommodated → no product forms.", "c": "Enzymes", "p": 1, "img": null}, {"t": "mc", "q": "An allosteric effector molecule binds where?", "options": ["At the allosteric site — a second site, distinct from the active site", "At the active site, competing directly with the substrate", "To the substrate, before it ever reaches the enzyme", "To the product, blocking its release"], "ans": 0, "why": "Allosteric = a separate regulatory site; binding there switches the enzyme on or off.", "c": "Enzymes", "p": 1}, {"t": "mc", "q": "<b>Feedback inhibition</b> is listed on the Metabolism 2 summary slide. Which Part 1 concept is it?", "options": ["Allosteric inhibition — an effector binds the allosteric site and shuts the enzyme off", "Substrate-level phosphorylation", "Lowering of the activation energy", "Coupling an endergonic reaction to an exergonic one"], "ans": 0, "why": "It sits on an examinable summary slide but was never spoken aloud — cheap insurance, and it links straight back to allosteric inhibition.", "c": "Enzymes", "p": 0}, {"t": "fill", "q": "Enzymes facilitate biochemical reactions by lowering their ____ ____.", "accept": [["activation"], ["energy"]], "c": "Enzymes", "p": 1}, {"t": "qa", "q": "What is <b>substrate-level phosphorylation</b>?", "a": "ATP production by the transfer of a <b>phosphate group from a catabolic intermediate to ADP</b>.", "c": "Phosphorylation", "p": 1, "img": null}, {"t": "qa", "q": "Why does substrate-level phosphorylation matter?", "a": "It generates ATP <b>in the absence of aerobic respiration, photosynthesis and the proton motive force</b> — which is exactly why glycolysis and fermentation can run with no oxygen at all. <i>“That's important, guys.”</i>", "c": "Phosphorylation", "p": 1, "img": null}, {"t": "qa", "q": "Give the worked example of substrate-level phosphorylation — enzyme, substrates, activator, products.", "a": "Enzyme: <b>pyruvate kinase</b>. Substrates: <b>phosphoenolpyruvate (PEP) + ADP</b>. Allosteric activator: <b>fructose 1,6-bisphosphate</b>. Products: <b>pyruvate + ATP</b>. <i>Cross-chapter link he makes twice: this is also the last step of glycolysis, and the only glycolytic enzyme he requires.</i>", "c": "Phosphorylation", "p": 1, "img": null}, {"t": "qa", "q": "What is <b>oxidative phosphorylation</b>?", "a": "The oxidation of chemical substrates and generation of ATP by the <b>electron transport chain plus chemiosmosis</b>. It generates substantially more ATP than substrate-level phosphorylation alone.", "c": "Phosphorylation", "p": 1, "img": null}, {"t": "mc", "q": "How much ATP is produced from one glucose molecule under aerobic conditions?", "options": ["38 ATP", "2 ATP", "4 ATP", "12 ATP"], "ans": 0, "why": "38 = 2 (glycolysis) + 2 (TCA) + 34 (ETC / oxidative phosphorylation). He reads this number off the figure — it is not in the slide text.", "c": "Phosphorylation", "p": 1}, {"t": "mc", "q": "Which of the following is NOT required for substrate-level phosphorylation?", "options": ["Oxygen", "ADP", "A catabolic intermediate carrying a phosphate group", "An enzyme such as pyruvate kinase"], "ans": 0, "why": "SLP makes ATP in the absence of aerobic respiration, photosynthesis and the proton motive force — so no O₂. Expect this as a “which is NOT” stem.", "c": "Phosphorylation", "p": 1}, {"t": "fill", "q": "Substrate-level phosphorylation transfers a phosphate group from a catabolic ____ to ____, producing ATP.", "accept": [["intermediate"], ["adp"]], "c": "Phosphorylation", "p": 1}, {"t": "qa", "q": "Name the <b>electron carrier molecules</b>.", "a": "<b>NAD, NADP and FAD</b> — reduced forms <b>NADH, NADPH and FADH₂</b>. <i>“That's why you need to know electron carrier molecules — you need to know them.” The full chemical names are explicitly NOT required.</i>", "c": "Electrons", "p": 1, "img": null}, {"t": "qa", "q": "Define <b>oxidation</b> and <b>reduction</b>.", "a": "<b>Oxidation</b> = a molecule <b>loses</b> electrons. <b>Reduction</b> = a molecule <b>gains</b> electrons. Together, redox reactions are the transfer of electrons from one molecule to another — another way energy is liberated or captured. Example: NAD⁺ + 2e⁻ + H⁺ → NADH.", "c": "Electrons", "p": 1, "img": null}, {"t": "qa", "q": "What is <b>redox potential (E)</b>, and when is energy released?", "a": "Redox potential = the tendency of a molecule to <b>acquire</b> electrons. <b>Energy is released when electrons move from donors with more negative redox potentials to acceptors with more positive redox potentials.</b> <i>The redox-couple table itself is explicitly not examinable — only this principle is.</i>", "c": "Electrons", "p": 1, "img": null}, {"t": "qa", "q": "What happens in the <b>electron transport chain</b> during aerobic respiration?", "a": "Energy is liberated from electrons as they move from <b>low-redox-potential carrier molecules to better and better electron acceptors</b>, with <b>O₂ as the terminal acceptor</b>. That energy is used to pump protons out.", "c": "Electrons", "p": 1, "img": null}, {"t": "qa", "q": "How does the <b>proton motive force</b> (chemiosmosis) make ATP?", "a": "Protons pumped out accumulate outside, then flow back in through <b>ATP synthase</b>, and that flow drives synthesis of large amounts of ATP. <i>His analogy: the protons are the wind and ATP synthase is the windmill.</i>", "c": "Electrons", "p": 1, "img": null}, {"t": "mc", "q": "Energy is released when electrons move…", "options": ["from donors with more negative redox potential to acceptors with more positive redox potential", "from donors with more positive redox potential to acceptors with more negative redox potential", "only between molecules with identical redox potentials", "from ATP directly to NAD⁺"], "ans": 0, "why": "The larger the gap from a negative donor to a positive acceptor, the more energy is released — that is what the ETC exploits.", "c": "Electrons", "p": 1}, {"t": "mc", "q": "Which of these is NOT an electron carrier?", "options": ["ATP", "NAD", "NADP", "FAD"], "ans": 0, "why": "ATP is the energy storage molecule. NAD, NADP and FAD are the electron carriers.", "c": "Electrons", "p": 1}, {"t": "fill", "q": "____ is the loss of electrons; ____ is the gain of electrons.", "accept": [["oxidation"], ["reduction"]], "c": "Electrons", "p": 1}, {"t": "qa", "q": "What are the substrate and the products of <b>glycolysis</b>?", "a": "One molecule of <b>glucose (6 carbons)</b> → <b>two molecules of pyruvate (3 carbons each)</b>, plus energy (2 ATP net and 2 NADH by the EMP route) and small-molecule precursors for biosynthesis. <i>“Right now I'm going to give you some information that's 100% you need it in your final exam.” He repeats it five times.</i>", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "Name the three glycolytic pathways and where each is found.", "a": "<b>EMP (Embden–Meyerhof–Parnas)</b> — the most common; found in all 3 domains. <b>Entner–Doudoroff (ED)</b> — many bacteria and archaea. <b>Pentose phosphate (PP)</b> — most microbial organisms.", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "Describe the two phases of the <b>EMP pathway</b>.", "a": "<b>Phase I — 6-carbon:</b> glucose is prepared for dismantling; <b>2 ATP consumed</b>.<br><b>Phase II — 3-carbon:</b> the energy-generating phase; <b>4 ATP produced by substrate-level phosphorylation</b>, plus NADH. Net = 2 ATP.", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "Which four molecules of <b>EMP Phase I</b> must you know?", "a": "1. <b>Glucose</b> — the substrate, 6C.<br>2. <b>Fructose 1,6-bisphosphate</b> — the last 6-carbon molecule, the one that gets split.<br>3. <b>Dihydroxyacetone phosphate (DHAP)</b> — 3C.<br>4. <b>Glyceraldehyde-3-phosphate</b> — 3C (interconverts with DHAP).<br><i>“Memorize 1, 2, 3, 4.” Everything else in Phase I is off the required list.</i>", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "Give the net yields of the EMP, Entner–Doudoroff and pentose phosphate pathways.", "a": "<b>EMP</b>: 2 ATP, 2 NADH. <b>ED</b>: 1 ATP, 1 NADH, 1 NADPH. <b>PP</b>: 1 ATP, 2 NADPH. <i>“These are the numbers that you need to memorize.” EMP is the most efficient.</i>", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "Why do alternative glycolytic pathways (ED and PP) exist?", "a": "<b>ED</b> is an entry point for some sugars that <b>cannot enter EMP</b>, and yields NADPH as well as NADH. <b>PP</b> supplies many different <b>carbon-sugar precursors</b> for other pathways, and NADPH. <i>His verbal addition, not on the slides: some microorganisms simply lack the EMP enzymes.</i>", "c": "Glycolysis", "p": 1, "img": null}, {"t": "qa", "q": "How do you read the energy steps off a pathway diagram?", "a": "<b>ADP → ATP means ATP is produced.</b> <b>ATP → ADP means ATP is consumed.</b> <i>His own instruction — aimed straight at a figure question on the EMP diagram.</i>", "c": "Glycolysis", "p": 1, "img": null}, {"t": "mc", "q": "One molecule of glucose passing through glycolysis produces how many molecules of pyruvate?", "options": ["2", "1", "3", "4"], "ans": 0, "why": "1 glucose (6C) → 2 pyruvate (3C each). He flagged this as 100% exam material.", "c": "Glycolysis", "p": 1}, {"t": "mc", "q": "Which statement about glycolysis and oxygen is correct?", "options": ["Glycolysis proceeds both with and without oxygen", "Glycolysis requires oxygen as a terminal electron acceptor", "Glycolysis only occurs when oxygen is absent", "Glycolysis requires oxygen only during Phase II"], "ans": 0, "why": "Glycolysis needs no O₂. What changes downstream is how NAD⁺ is regenerated — respiration with O₂, fermentation without.", "c": "Glycolysis", "p": 1}, {"t": "mc", "q": "Which glycolytic pathway does NOT produce NADPH?", "options": ["EMP", "Entner–Doudoroff", "Pentose phosphate", "All three produce NADPH"], "ans": 0, "why": "EMP yields 2 ATP and 2 NADH only. ED gives NADH and NADPH; PP gives NADPH rather than NADH.", "c": "Glycolysis", "p": 1}, {"t": "mc", "q": "In EMP Phase I, which molecule is the last 6-carbon intermediate — the one split into two 3-carbon molecules?", "options": ["Fructose 1,6-bisphosphate", "Glucose 6-phosphate", "Glyceraldehyde-3-phosphate", "Phosphoenolpyruvate"], "ans": 0, "why": "Fructose 1,6-bisphosphate is split into DHAP and glyceraldehyde-3-phosphate — one of the four flagged Phase I molecules.", "c": "Glycolysis", "p": 1}, {"t": "fill", "q": "Glycolysis converts one ____ into two ____.", "accept": [["glucose"], ["pyruvate", "pyruvates"]], "c": "Glycolysis", "p": 1}, {"t": "table", "title": "★ Net yields of the three glycolytic pathways", "headers": ["Pathway", "ATP", "NADH", "NADPH"], "rows": [["EMP (Embden–Meyerhof–Parnas)", {"a": ["2", "two"], "mode": "exact"}, {"a": ["2", "two"], "mode": "exact"}, {"a": ["0", "zero", "none"], "mode": "exact"}], ["Entner–Doudoroff (ED)", {"a": ["1", "one"], "mode": "exact"}, {"a": ["1", "one"], "mode": "exact"}, {"a": ["1", "one"], "mode": "exact"}], ["Pentose phosphate (PP)", {"a": ["1", "one"], "mode": "exact"}, {"a": ["0", "zero", "none"], "mode": "exact"}, {"a": ["2", "two"], "mode": "exact"}]], "c": "Glycolysis", "p": 1, "note": "Type the number produced per glucose; use 0 where the pathway makes none."}, {"t": "qa", "q": "Why does <b>fermentation</b> occur?", "a": "Cells hold a <b>finite pool of NAD⁺</b>. As NAD⁺ is reduced to NADH it runs down, and unless NADH is re-oxidised, glycolysis stops. Respiration regenerates NAD⁺ by passing electrons down the ETC to O₂; <b>fermentation regenerates NAD⁺ when there is no oxygen</b>. <i>“When you cut off the oxygen, fermentation will happen.”</i>", "c": "Fermentation", "p": 1, "img": null}, {"t": "qa", "q": "What are the <b>final products of fermentation</b>?", "a": "<b>Acids and alcohols.</b> Answering only “ethanol” is the trap — it is one example. Specific products across the three fermentations include ethanol, lactic acid, acetic acid and butanol. <i>He has already asked this in class and corrected the answer: “it's better to say… acids and alcohols.”</i>", "c": "Fermentation", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Name the three fermentations, with their organisms, products and industrial uses.", "a": "<b>Lactic acid</b> (simplest, most common) — Gram-positive lactic acid bacteria (LAB: <i>Lactobacillus</i>, <i>Lactococcus</i>) → lactic acid → yoghurt, sour cream.<br><b>Alcoholic</b> — many yeasts, some bacteria → ethanol + CO₂ → beer, wine.<br><b>Mixed acid</b> (more complex) — Enterobacteriaceae → a mixture of acids → acetone and butanol.", "c": "Fermentation", "p": 1, "img": null}, {"t": "qa", "q": "Which organisms perform <b>mixed acid fermentation</b>?", "a": "Many bacteria of the family <b>Enterobacteriaceae</b> — <i>Escherichia coli</i>, <i>Salmonella</i> and <i>Proteus</i>. Several have been commercially adapted for <b>acetone and butanol</b> production. <i>The discriminator in his MCQ is membership in Enterobacteriaceae; the distractor he floated aloud was Agrobacterium.</i>", "c": "Fermentation", "p": 1, "img": null}, {"t": "mc", "q": "Which of the following organisms CAN perform mixed acid fermentation?", "options": ["<i>Escherichia coli</i>", "<i>Agrobacterium tumefaciens</i>", "<i>Lactobacillus</i>", "<i>Saccharomyces cerevisiae</i>"], "ans": 0, "why": "Mixed acid fermentation belongs to the family Enterobacteriaceae — E. coli, Salmonella, Proteus. <i>Agrobacterium</i> is the distractor he named, <i>Lactobacillus</i> does lactic acid fermentation, and <i>Saccharomyces</i> is a yeast — alcoholic fermentation. He drafted this question aloud.", "c": "Fermentation", "p": 1, "quiz": true}, {"t": "mc", "q": "Which of the following CANNOT perform mixed acid fermentation?", "options": ["<i>Agrobacterium</i>", "<i>Escherichia coli</i>", "<i>Salmonella</i>", "<i>Proteus</i>"], "ans": 0, "why": "E. coli, Salmonella and Proteus are all Enterobacteriaceae; Agrobacterium is not — the exact distractor he named. He warned he may ask it either polarity, so read the stem carefully.", "c": "Fermentation", "p": 1, "quiz": true}, {"t": "mc", "q": "Respiration and fermentation — which statement is correct?", "options": ["Each regenerates NAD⁺; respiration needs O₂, fermentation does not", "Only respiration regenerates NAD⁺", "Fermentation regenerates NADPH rather than NAD⁺", "Both processes require oxygen, but fermentation makes less ATP"], "ans": 0, "why": "The shared job is regenerating NAD⁺ so glycolysis can keep running; the discriminator is oxygen.", "c": "Fermentation", "p": 1}, {"t": "mc", "q": "Alcoholic fermentation is carried out mainly by…", "options": ["Many yeasts and some bacteria", "Gram-positive lactic acid bacteria", "Enterobacteriaceae", "Archaea only"], "ans": 0, "why": "Yeast alcoholic fermentation gives ethanol + CO₂ — the basis of beer and wine.", "c": "Fermentation", "p": 0}, {"t": "fill", "q": "Mixed acid fermentation is performed by bacteria of the family ____, and has been commercially adapted to produce acetone and ____.", "accept": [["enterobacteriaceae", "enterobacteria"], ["butanol"]], "c": "Fermentation", "p": 1}, {"t": "table", "title": "★ The three fermentations", "headers": ["Fermentation", "Who does it", "Main product", "Industry"], "rows": [["Lactic acid", {"a": ["lactic acid bacteria", "gram positive", "lab", "lactobacillus"], "mode": "contains"}, {"a": ["lactic acid", "lactate"], "mode": "contains"}, {"a": ["yoghurt", "yogurt", "sour cream"], "mode": "contains"}], ["Alcoholic", {"a": ["yeast"], "mode": "contains"}, {"a": ["ethanol", "alcohol"], "mode": "contains"}, {"a": ["beer", "wine"], "mode": "contains"}], ["Mixed acid", {"a": ["enterobacteriaceae", "enterobacteria", "coli"], "mode": "contains"}, {"a": ["acid"], "mode": "contains"}, {"a": ["acetone", "butanol"], "mode": "contains"}]], "c": "Fermentation", "p": 1, "note": "One or two words per cell."}, {"t": "qa", "q": "What is the substrate of the <b>TCA cycle</b>, and how many carbons does it have?", "a": "<b>Pyruvate</b>, arriving from glycolysis — <b>3 carbons</b>. <i>“That's something that you need to memorize — how many carbons does it have? 3 carbons.”</i> Note the shape: the TCA cycle is a <b>loop</b>, not a linear pathway — it ends where it begins, at oxaloacetate.", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "What is the purpose of the TCA cycle?", "a": "To <b>completely oxidise pyruvate to CO₂</b>, capturing many electrons (in NADH and FADH₂) that then drive ATP synthesis via the electron transport chain and oxidative phosphorylation.", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "Describe the <b>transition reaction</b> (“step 0”).", "a": "<b>Pyruvate dehydrogenase</b> catalyses a coupled reaction that adds a <b>two-carbon acetyl group to coenzyme A</b> with removal of <b>CO₂</b>, producing the high-energy molecule <b>acetyl-CoA</b>. 3C → 2C. <i>“This must be memorized. Acetyl coenzyme A must be memorized.”</i>", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "TCA <b>step 1</b> — enzyme and product?", "a": "<b>Citrate synthase</b> transfers the acetyl group from acetyl-CoA to <b>oxaloacetate</b>, producing <b>citrate</b>. <i>He narrows it himself: “I'm just going to ask you — acetyl-CoA entered the TCA cycle by the help of citrate synthase, it becomes citrate. That's all.”</i>", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "TCA <b>step 5</b> — enzyme and product, and what is the trap?", "a": "<b>Succinate thiokinase</b> removes CoA, yielding energy for <b>substrate-level phosphorylation</b> to produce <b>GTP — not ATP directly</b>. The GTP is then converted to ATP. <i>Flagged three times: “it's not ATP, it's guanosine triphosphate.”</i>", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "TCA <b>step 8</b> — enzyme and product?", "a": "<b>Malate dehydrogenase</b> removes hydrogen from malate, yielding <b>NADH + H⁺</b> and regenerating <b>oxaloacetate</b> so the cycle can begin again.", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "State the net result of oxidising <b>ONE pyruvate</b> in the TCA cycle.", "a": "<b>4 NADH · 1 FADH₂ · 1 ATP (via GTP) · 3 CO₂.</b> <i>“I'm emphasizing, and I'm repeating this many times because it's gonna be in your final exam.”</i> It is 4 NADH and 3 CO₂ rather than 3 and 2 because his numbering folds the transition reaction into the cycle — use his numbers.", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "qa", "q": "…and what is the TCA net yield per molecule of <b>GLUCOSE</b>?", "a": "<b>Double everything: 8 NADH · 2 FADH₂ · 2 ATP · 6 CO₂</b> — because 1 glucose gives 2 pyruvate. <i>“Read the question carefully. Twice this per molecule of the glucose.” He never says the doubled numbers aloud — do the doubling yourself and check which the stem asks for.</i>", "c": "TCA Cycle", "p": 1, "img": null}, {"t": "mc", "q": "Per molecule of <b>glucose</b>, the net yield of the TCA cycle is:", "options": ["8 NADH, 2 FADH₂, 2 ATP and 6 CO₂", "4 NADH, 1 FADH₂, 1 ATP and 3 CO₂", "2 NADH, 2 FADH₂, 4 ATP and 2 CO₂", "8 NADH, 2 FADH₂, 38 ATP and 6 CO₂"], "ans": 0, "why": "The 4 / 1 / 1 / 3 figures are per PYRUVATE. One glucose gives two pyruvate, so everything doubles. This per-pyruvate vs per-glucose swap is the trap he warned about directly.", "c": "TCA Cycle", "p": 1}, {"t": "mc", "q": "Substrate-level phosphorylation at TCA step 5 directly produces:", "options": ["GTP, which is then converted to ATP", "ATP directly", "NADPH", "FADH₂"], "ans": 0, "why": "Succinate thiokinase makes guanosine triphosphate — “it's not ATP, it's guanosine triphosphate.” The GTP is then converted to ATP.", "c": "TCA Cycle", "p": 1}, {"t": "mc", "q": "Which enzyme converts pyruvate to acetyl-CoA?", "options": ["Pyruvate dehydrogenase", "Pyruvate kinase", "Citrate synthase", "Malate dehydrogenase"], "ans": 0, "why": "The transition reaction. Do not mix it with pyruvate kinase, which is the last step of glycolysis.", "c": "TCA Cycle", "p": 1}, {"t": "fill", "q": "TCA net per pyruvate: ____ NADH, ____ FADH₂, ____ ATP and ____ CO₂.", "accept": [["4", "four"], ["1", "one"], ["1", "one"], ["3", "three"]], "c": "TCA Cycle", "p": 1}, {"t": "fill", "q": "The transition reaction uses the enzyme ____ to convert pyruvate (3C) into ____ (2C).", "accept": [["pyruvate dehydrogenase", "dehydrogenase"], ["acetyl coa", "acetyl-coa", "acetyl coenzyme a"]], "c": "TCA Cycle", "p": 1}], CATS=["Energy", "Enzymes", "Phosphorylation", "Electrons", "Glycolysis", "Fermentation", "TCA Cycle"];
+const STORE="bio2ee3_metabolism_anki_v1", MASTER=4, EXAMK="bio2ee3_metabolism_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>

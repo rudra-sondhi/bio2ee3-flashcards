@@ -1,0 +1,370 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Chapter 7 Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>Chapter 7 — DNA Replication</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Focus: the timeline of life · history figures · the three domains · macromolecules · endosymbiosis · origin of life</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "qa", "q": "<b>Griffith experiment (1920s)</b> &mdash; give the four injections and what happened to the mouse each time. <i>He said: &ldquo;I can give this 3 to 4 points, and that&rsquo;s a very good candidate.&rdquo;</i>", "a": "Model: mice + <i>Streptococcus pneumoniae</i>.<br>&bull; <b>Heat-killed S</b> &rarr; mouse <b>lives</b><br>&bull; <b>Live S</b> &rarr; mouse <b>dies</b><br>&bull; <b>Live R</b> &rarr; mouse <b>lives</b><br>&bull; <b>Heat-killed S + live R</b> &rarr; mouse <b>DIES</b>, and <b>live S cells are recovered</b> from it.", "c": "Discovery", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Griffith: <b>what is the reason</b> the heat-killed S + live R mixture kills the mouse? <i>He said: &ldquo;That&rsquo;s something that I would ask you for the final exam to write it down. What is the reason?&rdquo;</i>", "a": "Heating <b>bursts the S cells</b> and releases their <b>DNA</b> into the mixture &rarr; the live R cells <b>take that DNA up (transformation)</b> &rarr; the <b>capsule genes integrate into the R cell&rsquo;s genomic DNA</b> &mdash; he stressed <b>not a plasmid</b> &rarr; R now builds a capsule, becomes virulent and kills the mouse. <i>&ldquo;I don&rsquo;t need any super scientific explanation.&rdquo;</i>", "c": "Discovery", "p": 1, "img": null}, {"t": "qa", "q": "What does the Griffith experiment show &mdash; and what can it <i>not</i> show?", "a": "It is the <b>earliest evidence that DNA <i>may</i> be the hereditary information</b> in the cell. It cannot prove it: the heat-killed material also contains <b>protein, RNA, lipid and carbohydrate</b>, so any of those could be the transforming agent. That gap is exactly what Avery&ndash;MacLeod&ndash;McCarty closed.", "c": "Discovery", "p": 1, "img": null}, {"t": "qa", "q": "<b>Avery&ndash;MacLeod&ndash;McCarty (1940s)</b> &mdash; give the answer in the five parts he counted out loud. <i>He said: &ldquo;I can give you 5 marks, even 6, with some explanation.&rdquo;</i>", "a": "(1) <b>Observation</b>: a highly purified extract from heat-killed S cells transforms living R cells into S cells <i>in vitro</i>.<br>(2) <b>Problem</b>: that extract contains protein, lipid, DNA, RNA and carbohydrate &mdash; which one is the transforming principle?<br>(3) <b>Hypothesis</b>: it is DNA.<br>(4) <b>Experiment</b>: treat the extract <b>separately</b> with protease, RNase and DNase, then add to R cells and plate.<br>(5) <b>Result</b>: only DNase abolishes transformation &rArr; <b>DNA is the transforming principle</b>.", "c": "Discovery", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Avery&ndash;MacLeod&ndash;McCarty: what happened with each enzyme treatment?", "a": "&bull; <b>Protease</b> (destroys protein) &rarr; R cells <b>still transform</b>, S colonies grow.<br>&bull; <b>RNase</b> (destroys RNA) &rarr; <b>still transforms</b> &mdash; RNA is not the key, because DNA can simply make it again.<br>&bull; <b>DNase</b> (destroys DNA) &rarr; <b>nothing grows, transformation abolished</b>.<br>Removing DNA is the only thing that kills the effect.", "c": "Discovery", "p": 1, "img": null}, {"t": "qa", "q": "Why is it essential that the enzymes were used <b>separately</b> rather than as a mixture?", "a": "A <b>mixture</b> of enzymes destroys protein, RNA <i>and</i> DNA at once &mdash; nothing transforms and you learn nothing. Treating the extract with <b>one enzyme at a time</b> is what lets you pin the effect on a single molecule. His marking rule: <i>&ldquo;prove to me that you got the idea why they designed this experiment.&rdquo;</i>", "c": "Discovery", "p": 1, "img": null}, {"t": "qa", "q": "Define <b>transformation</b>. <i>(He pointed out the definition is missing from the slide.)</i>", "a": "The <b>uptake of foreign genetic material &mdash; mostly DNA &mdash; by an organism or microorganism, which gives it a new trait</b>. His example: put the human insulin gene into <i>E. coli</i> and it now makes insulin, a trait it never had.", "c": "Discovery", "p": 1, "img": null}, {"t": "qa", "q": "<b>Hershey&ndash;Chase</b> experiment &mdash; design and result.", "a": "Phage T2 is only protein + DNA, so one of them must be the genetic material. They labelled phage <b>protein with radioactive sulfur</b> and phage <b>DNA with radioactive phosphorus</b>, infected <i>E. coli</i>, then <b>centrifuged</b>: the <b>phosphorus (DNA) went into the cells &mdash; the pellet</b>; the sulfur (capsids) stayed in the supernatant. So <b>DNA enters the cell and carries the information</b>.", "c": "Discovery", "p": 0, "img": null}, {"t": "qa", "q": "List the <b>structural</b> differences between DNA and RNA. <i>He said: &ldquo;I can guarantee 100% it will be in your exam&hellip; at least 2 marks.&rdquo;</i>", "a": "&bull; <b>Sugar</b>: deoxyribose vs <b>ribose</b><br>&bull; <b>Base</b>: thymine vs <b>uracil</b><br>&bull; <b>Strands</b>: double-stranded antiparallel helix vs <b>single-stranded</b><br>Both still have a phosphate group and a sugar&ndash;phosphate backbone &mdash; that is not a difference.", "c": "DNA vs RNA", "p": 1, "img": null}, {"t": "qa", "q": "Beyond structure, which DNA vs RNA differences does he explicitly want? <i>He said: &ldquo;not [only] in terms of the structures, but also replication.&rdquo;</i>", "a": "&bull; <b>Process</b>: DNA is <b>replicated</b>; RNA is <b>transcribed</b> from a DNA template and then translated or degraded &mdash; there is <b>no RNA replication</b>.<br>&bull; <b>Role / stability</b>: DNA is the stable permanent hereditary store; RNA is a short-lived working copy (mRNA, tRNA, rRNA, regulatory RNA).<br>&bull; <b>Location in eukaryotes</b>: DNA stays in the nucleus; RNA is made there but functions in the cytoplasm.", "c": "DNA vs RNA", "p": 1, "img": null}, {"t": "qa", "q": "What are the three parts of a DNA nucleotide?", "a": "(1) a five-carbon sugar, <b>2-deoxyribose</b>; (2) a <b>phosphate group</b> on the <b>5′ carbon</b> of the sugar; (3) a <b>nitrogenous base</b> on the <b>1′ carbon</b>. <i>He said you do NOT need to memorise or draw the chemical structures &mdash; just be able to name the parts.</i>", "c": "DNA Structure", "p": 1, "img": null}, {"t": "qa", "q": "Which chemical bonds hold the two strands together, and which build the backbone?", "a": "<b>Hydrogen bonds</b> between the nitrogenous bases hold the strands together &mdash; the bases act like a <b>glue</b>: <b>A&ndash;T = 2</b> hydrogen bonds, <b>G&ndash;C = 3</b>. The backbone is <b>phosphodiester covalent bonds</b> linking sugar to phosphate. <i>He said you only need to know which bond is where &mdash; the chemistry itself is not microbiology.</i>", "c": "DNA Structure", "p": 1, "img": null}, {"t": "qa", "q": "What does it mean that the two DNA strands are <b>complementary and antiparallel</b>?", "a": "They run in opposite directions &mdash; one <b>5′&rarr;3′</b>, the other <b>3′&rarr;5′</b> &mdash; and each base pairs with its partner (A&ndash;T, G&ndash;C). <i>If he asks you to draw DNA, label the directions: &ldquo;You need to give me the direction.&rdquo;</i>", "c": "DNA Structure", "p": 1, "img": null}, {"t": "qa", "q": "Compare DNA packaging in Bacteria, Archaea and Eukarya. <i>&ldquo;Do you need to memorize this? Yes, all of this&rdquo; &mdash; except the sizes.</i>", "a": "&bull; <b>Bacteria</b>: one <b>circular</b> chromosome, <b>supercoiled</b>, <b>no histones</b>, plasmids common.<br>&bull; <b>Archaea</b>: one <b>circular</b> chromosome, packaged around <b>histones</b>, plasmids common.<br>&bull; <b>Eukarya</b>: <b>multiple linear</b> chromosomes around <b>histones</b>, plasmids rare (a few fungi and plants).<br>The structure of DNA is conserved across the domains &mdash; only the packaging differs.", "c": "Genome Packaging", "p": 1, "img": null}, {"t": "qa", "q": "What is special about <i>Deinococcus radiodurans</i>?", "a": "It may carry <b>4 to 10 identical copies of its genome</b> &mdash; an exception to the one-circular-chromosome rule &mdash; and the stacked copies are thought to give it <b>strong radiation-damage resistance</b>: if one copy is mutated, an intact copy serves as backup and repair template. <i>He said: know the name and the feature; spelling is not required, and it will be MCQ only.</i>", "c": "Genome Packaging", "p": 1, "img": null}, {"t": "qa", "q": "Exam tactic: a question lists organism names you have never seen and asks which has the <b>largest genome</b>. What do you do?", "a": "Work out which name is <b>eukaryotic</b> and pick that one &mdash; <i>&ldquo;if you are in the situation that you&rsquo;re gonna get the most biggest size, pick eukaryotic cells.&rdquo;</i> The <b>kbp numbers</b> in the packaging table are explicitly <b>not</b> examinable.", "c": "Genome Packaging", "p": 1, "img": null}, {"t": "qa", "q": "Which enzyme lets hyperthermophilic archaea keep their chromosome stable?", "a": "<b>Reverse gyrase</b> &mdash; it increases the <b>thermostability</b> of the chromosome, and is part of why these archaea survive extreme habitats. <i>He flagged this line on the packaging table as important.</i>", "c": "Genome Packaging", "p": 1, "img": null}, {"t": "qa", "q": "Verbal note he told the class to write down: what is unique about <i>Agrobacterium tumefaciens</i>, and what does the packaging table get wrong?", "a": "It is the only microbe that transforms <b>between kingdoms</b> &mdash; a bacterium injecting its own DNA into a <b>plant</b>, producing the natural tumours (galls) you see on tree trunks. His correction: what is transferred and integrated is a <b>piece of DNA, not a plasmid</b>, so reading the table&rsquo;s &ldquo;plasmids in plants&rdquo; as Agrobacterium plasmids is wrong.", "c": "Genome Packaging", "p": 1, "img": null}, {"t": "qa", "q": "Which repeats does <b>DnaA</b> bind in the origin of replication?", "a": "The <b>9-base repeats</b> of <b>oriC</b> &mdash; which also contains <b>13-base</b> repeats. Cooperative binding of further DnaA molecules then causes <b>localised unwinding</b> of the DNA. <i>Asked if it must be memorised, he said: &ldquo;Unfortunately, yes.&rdquo;</i>", "c": "Initiation", "p": 1, "img": null}, {"t": "qa", "q": "<b>Briefly explain DNA replication initiation in bacterial cells.</b>", "a": "(1) Replication starts at the single <b>origin of replication (oriC)</b>, carrying 13-base and 9-base repeats.<br>(2) <b>DnaA</b> binds the 9-base repeats; cooperative binding gives <b>localised unwinding</b>.<br>(3) <b>DnaB</b> (helicase) is recruited with <b>DnaC</b> (helicase loader) and unwinds the helix.<br>(4) <b>DnaG</b> (primase) lays down the initial <b>RNA primers</b>.<br>(5) <b>SSB proteins</b> coat the single strands.<br>Result: a <b>replication bubble</b> with two forks.", "c": "Initiation", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Give the job of <b>DnaB</b>, <b>DnaC</b> and <b>DnaG</b>.", "a": "<b>DnaB</b> = the <b>helicase</b> &mdash; unwinds and opens the double helix. <b>DnaC</b> = the <b>helicase loader</b> that brings DnaB in. <b>DnaG</b> = the <b>primase</b> &mdash; lays the short RNA primers. <i>He noted &lsquo;helicase&rsquo; is the general name for any enzyme that unwinds DNA, in bacteria and eukaryotes alike.</i>", "c": "Initiation", "p": 1, "img": null}, {"t": "qa", "q": "Give the <b>two</b> roles of single-stranded DNA binding proteins (SSBs).", "a": "(1) <b>Keep the strands apart</b> &mdash; stop the unwound DNA re-annealing, since the hydrogen bonds want to re-form.<br>(2) <b>Protect the exposed single-stranded DNA from nucleases</b> &mdash; unwound DNA is very vulnerable, and nucleases are everywhere in the cell.<br><i>The second role is verbal &mdash; it is not written on the slide.</i>", "c": "Initiation", "p": 1, "img": null}, {"t": "qa", "q": "Why does replication need an <b>RNA primer</b> at all?", "a": "DNA polymerase cannot start a strand from nothing &mdash; it needs a <b>double-stranded start point with a free 3′ end</b> to extend. <b>Primase</b> lays a short complementary <b>RNA</b> primer to create that start point, and DNA polymerase III then takes over.", "c": "Initiation", "p": 1, "img": null}, {"t": "qa", "q": "How does replication initiation differ in <b>eukaryotic</b> cells?", "a": "<b>Many origins</b> per chromosome, not one: the <b>origin recognition complex (ORC)</b> binds <b>ARS</b> (autonomously replicating sequences) roughly <b>10&ndash;100 kb apart</b>; then the same logic follows &mdash; unwinding into a bubble, SSBs holding the strands apart. <i>He said the accessory names (CDT1, CDC6, MCM complex) are NOT needed for the final, only for the chapter quiz. And read the stem carefully: E. coli &rarr; bacterial; Saccharomyces or Arabidopsis &rarr; eukaryotic.</i>", "c": "Initiation", "p": 1, "img": null}, {"t": "qa", "q": "What does <b>semi-conservative</b> replication mean?", "a": "Each newly copied DNA molecule contains <b>one strand from the original molecule and one newly synthesised strand</b>. This is what the heavy/light nitrogen isotope experiment (<sup>15</sup>N / <sup>14</sup>N, Meselson&ndash;Stahl) shows: the first generation is one old + one new strand, and the parental strands are progressively diluted in later generations.", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "<b>Leading vs lagging strand</b> &mdash; what is the difference? <i>He said: &ldquo;This is something that I need to explain, because it will be in your exam.&rdquo;</i>", "a": "<b>Leading</b>: primed once and synthesised <b>continuously</b> by DNA polymerase III as one long strand. <b>Lagging</b>: synthesised <b>discontinuously</b> as short fragments, each needing <b>its own RNA primer</b>. The reason they behave differently: all DNA synthesis runs <b>5′&rarr;3′</b> only.", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "What are <b>Okazaki fragments</b>?", "a": "The short, discontinuous newly synthesised DNA pieces made on the <b>lagging strand</b>, each started from its own RNA primer and later joined into a single strand. <i>His framing: leading and lagging are the two MAIN strands; Okazaki fragments are the MINOR sub-components.</i>", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "What does <b>DNA polymerase III</b> do?", "a": "It is the main replicating enzyme: it <b>adds nucleotides onto the RNA primer</b>, pairing each incoming nucleotide with the template base (template T &rarr; brings A, template G &rarr; brings C), synthesising <b>5′&rarr;3′</b> &mdash; continuously on the leading strand, fragment by fragment on the lagging strand.", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "What are the <b>two jobs of DNA polymerase I</b>, and in which direction? <i>He said: &ldquo;Super important. Put a star.&rdquo;</i>", "a": "Both jobs run <b>5′&rarr;3′</b>, and they happen <b>simultaneously</b>: (1) <b>5′&rarr;3′ exonuclease</b> activity <b>removes the RNA primer</b>; (2) <b>5′&rarr;3′ polymerase</b> activity <b>fills the gap</b> with DNA. <i>He said he is asking about the direction of the primer removal AND the DNA synthesis.</i>", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "What does <b>DNA ligase</b> do, and why is it needed?", "a": "Once the polymerases have put every nucleotide in place the pieces are still <b>loose</b>. Ligase <b>covalently links adjacent nucleotides</b>, joining phosphate to the sugar backbone &mdash; sealing the nicks left <b>between Okazaki fragments</b> and where primers were removed. <i>The same enzyme you use in the lab to build recombinant DNA.</i>", "c": "Elongation", "p": 1, "img": null}, {"t": "qa", "q": "<b>Step by step, explain genome replication.</b> <i>He said: &ldquo;Write down everything which is involved and think logically.&rdquo;</i>", "a": "<b>Principle</b>: semi-conservative.<br><b>Initiation</b>: oriC &rarr; DnaA on the 9-base repeats &rarr; DnaB helicase loaded by DnaC &rarr; DnaG primase lays RNA primers &rarr; SSBs coat and protect &rarr; replication bubble with two forks.<br><b>Elongation</b>: DNA pol III extends the primers 5′&rarr;3′ &mdash; continuous leading strand, discontinuous lagging strand (Okazaki fragments).<br><b>Maturation</b>: DNA pol I removes the primers and fills the gaps (both 5′&rarr;3′); DNA ligase seals the nicks.<br><b>Termination</b>: forks meet at <i>ter</i>, Tus arrests them, topoisomerase separates the two daughter circles.", "c": "Elongation", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "What do <b>Tus</b> proteins do? <i>&ldquo;Tus proteins, you need to memorize it? Yes.&rdquo;</i>", "a": "Tus <b>binds the <i>ter</i> sites</b> on the circular chromosome and <b>arrests the replication forks</b>, stopping elongation where the two bidirectional forks meet. Replication begins at oriC and has to be terminated somewhere &mdash; that is the ter/Tus job.", "c": "Termination", "p": 1, "img": null}, {"t": "qa", "q": "How are the two daughter chromosomes separated at the end of circular replication?", "a": "The two newly replicated circular molecules are still interlinked; <b>topoisomerase (II)</b> cuts and separates them into two independent molecules, so cell division can follow. <i>He said you do NOT need to know which topoisomerase, and promised not to ask which enzyme does the cutting.</i>", "c": "Termination", "p": 1, "img": null}, {"t": "qa", "q": "Linear (eukaryotic) termination &mdash; what is the one thing he requires you to know?", "a": "<b>Telomerase extends the 3′ end</b> (RNA-templated DNA synthesis), because primer removal leaves 5′ ends that DNA polymerase cannot extend. <i>He guaranteed: &ldquo;I&rsquo;m not going to ask you to explain DNA replication in a linear form&rdquo; &mdash; do not memorise the step list, just telomerase and its role.</i>", "c": "Termination", "p": 1, "img": null}, {"t": "qa", "q": "What is a <b>telomere</b>? <i>(Verbal information he told the class to write down.)</i>", "a": "<b>Long repeated sequences at the end of each chromatid</b>. They get shorter after every round of replication; without them the coding DNA itself would be lost. Progressive shortening is linked to <b>ageing</b>, and chromosomes stripped of telomeres become prone to being chopped up, mutated and turning cancerous.", "c": "Termination", "p": 1, "img": null}, {"t": "mc", "q": "Griffith injects a mouse with <b>heat-killed S cells mixed with live R cells</b>. What happens?", "options": ["The mouse dies, and live S cells can be recovered from it", "The mouse lives &mdash; heat-killed cells cannot cause disease", "The mouse lives, but the R cells lose their capsule", "The mouse dies, and only R cells can be recovered"], "ans": 0, "why": "Transformation: the R cells take up the DNA released from the burst S cells, gain the capsule genes and become virulent S.", "c": "Discovery", "p": 1}, {"t": "mc", "q": "Which strain of <i>Streptococcus pneumoniae</i> is the virulent one?", "options": ["S &mdash; smooth, has a capsule", "R &mdash; rough, no capsule", "Both are equally virulent", "Neither is virulent unless heat-killed"], "ans": 0, "why": "The capsule is what makes S virulent; R has no capsule and causes no disease.", "c": "Discovery", "p": 1}, {"t": "mc", "q": "In Griffith&rsquo;s experiment, where do the capsule genes end up in the transformed R cell?", "options": ["Integrated into its genomic DNA", "On a newly acquired plasmid", "Inside the capsule itself", "Held as free RNA copies in the cytoplasm"], "ans": 0, "why": "He stressed this is the exception &mdash; the DNA integrates into genomic DNA, it is NOT a plasmid.", "c": "Discovery", "p": 1}, {"t": "mc", "q": "In the Avery&ndash;MacLeod&ndash;McCarty experiment, which treatment <b>abolished</b> transformation?", "options": ["DNase", "Protease", "RNase", "Lipase"], "ans": 0, "why": "Only destroying DNA stops the R &rarr; S conversion, so DNA is the transforming principle.", "c": "Discovery", "p": 1}, {"t": "mc", "q": "Hershey&ndash;Chase: after infection and centrifugation, which radiolabel is found <b>inside</b> the cells (in the pellet)?", "options": ["Radioactive phosphorus &mdash; the DNA", "Radioactive sulfur &mdash; the capsid protein", "Both labels equally", "Neither &mdash; both stay in the supernatant"], "ans": 0, "why": "Phage DNA (P-labelled) is injected into the cell; the S-labelled protein coats stay outside, in the supernatant.", "c": "Discovery", "p": 0}, {"t": "mc", "q": "His guessing rule when you have not Gram-stained the organism: <i>Streptococcus pneumoniae</i> is most likely&hellip;", "options": ["Gram-positive &mdash; most cocci are", "Gram-negative &mdash; most cocci are", "Acid-fast", "Impossible to guess at all"], "ans": 0, "why": "His rule of thumb: most cocci are Gram-positive, most bacilli Gram-negative &mdash; a good guess, though he warned there are exceptions.", "c": "Discovery", "p": 0}, {"t": "mc", "q": "Which of the following is <b>NOT</b> a difference between DNA and RNA?", "options": ["Presence of a phosphate group", "One uses deoxyribose, the other ribose", "One uses thymine, the other uracil", "One is double-stranded, the other single-stranded"], "ans": 0, "why": "Sugar, base and strandedness all differ; the phosphate group is common to both.", "c": "DNA vs RNA", "p": 1}, {"t": "mc", "q": "Which of the below listed bacteria has <b>linear</b> chromosomes?", "options": ["<i>Borrelia burgdorferi</i>", "<i>Escherichia coli</i>", "<i>Mycoplasma genitalium</i>", "<i>Streptococcus pneumoniae</i>"], "ans": 0, "why": "Borrelia is the exception &mdash; bacteria otherwise carry a single circular chromosome.", "c": "Genome Packaging", "p": 1, "quiz": true}, {"t": "mc", "q": "Which of the below listed bacteria is <b>not sensitive to radiation</b> (and does not have just one circular chromosome)?", "options": ["<i>Deinococcus radiodurans</i>", "<i>Borrelia burgdorferi</i>", "<i>Escherichia coli</i>", "<i>Mycoplasma genitalium</i>"], "ans": 0, "why": "It keeps 4&ndash;10 identical genome copies as backups, so radiation damage at one locus can be repaired from an intact copy.", "c": "Genome Packaging", "p": 1, "quiz": true}, {"t": "mc", "q": "Which organism has the <b>largest genome</b>?", "options": ["<i>Triticum aestivum</i> (wheat)", "<i>Sulfolobus solfataricus</i>", "<i>Pyrococcus horikoshii</i>", "<i>Escherichia coli</i>"], "ans": 0, "why": "Wheat is the only eukaryote listed &mdash; his rule: when the names are unfamiliar and the question asks for the biggest genome, pick the eukaryote.", "c": "Genome Packaging", "p": 1, "quiz": true}, {"t": "mc", "q": "Which statement about origins of replication is correct?", "options": ["Bacteria and archaea have exactly one; eukaryotes have many", "All three domains have exactly one", "Bacteria have many; eukaryotes have one", "Only eukaryotes have a defined origin"], "ans": 0, "why": "One oriC in bacteria and archaea (and one in a plasmid); eukaryotic chromosomes are far too large for one, so they use many ARS origins 10&ndash;100 kb apart.", "c": "Initiation", "p": 1}, {"t": "mc", "q": "DnaA interacts with ____ repeats in the origin of replication in bacterial cells.", "options": ["9-base", "10-base", "15-base", "35-base"], "ans": 0, "why": "DnaA binds the 9-base repeats of oriC, which also contains 13-base repeats.", "c": "Initiation", "p": 1, "quiz": true}, {"t": "mc", "q": "Which protein lays down the RNA primers at the bacterial origin?", "options": ["DnaG", "DnaA", "DnaB", "DnaC"], "ans": 0, "why": "DnaG is the primase; DnaA binds oriC, DnaB is the helicase and DnaC is its loader.", "c": "Initiation", "p": 1}, {"t": "mc", "q": "Which of these is <b>NOT</b> a role of single-stranded DNA binding proteins?", "options": ["Unwinding the double helix", "Stopping the separated strands from re-annealing", "Protecting single-stranded DNA from nucleases", "Holding the strands apart at the fork"], "ans": 0, "why": "Unwinding is the helicase (DnaB); SSBs only hold the strands apart and shield the exposed DNA.", "c": "Initiation", "p": 1}, {"t": "mc", "q": "Which of the below listed are the <b>main</b> strands involved in DNA replication, with the other being the minor one?", "options": ["Leading and lagging are the main; Okazaki fragments are the minor", "Leading and Okazaki are the main; lagging is the minor", "Lagging and Okazaki are the main; leading is the minor", "Primers and Okazaki fragments are the main"], "ans": 0, "why": "His exact framing: the main ones are leading and lagging; Okazaki fragments are the minor sub-components of the lagging strand.", "c": "Elongation", "p": 1, "quiz": true}, {"t": "mc", "q": "In which direction does <b>DNA polymerase I</b> remove the primer and synthesise DNA?", "options": ["5′&rarr;3′ for both, simultaneously", "3′&rarr;5′ for both", "Removes 3′&rarr;5′, synthesises 5′&rarr;3′", "Removes 5′&rarr;3′, synthesises 3′&rarr;5′"], "ans": 0, "why": "5′&rarr;3′ exonuclease activity removes the RNA primer while 5′&rarr;3′ polymerase activity fills the gap &mdash; he starred the direction of both.", "c": "Elongation", "p": 1, "quiz": true}, {"t": "mc", "q": "What do <b>Tus</b> proteins do?", "options": ["Bind ter sites and stop the replication forks", "Unwind the origin of replication", "Join Okazaki fragments together", "Extend the 3′ end of a linear chromosome"], "ans": 0, "why": "Tus binds ter and arrests elongation; ligase joins fragments, telomerase extends 3′ ends.", "c": "Termination", "p": 1}, {"t": "fill", "q": "DNA uses the sugar ____ and the base thymine; RNA uses the sugar ____ and the base ____.", "accept": [["deoxyribose", "2-deoxyribose"], ["ribose"], ["uracil"]], "c": "DNA vs RNA", "p": 1}, {"t": "fill", "q": "In Griffith&rsquo;s experiment the ____ strain is smooth, capsulated and virulent; the ____ strain is rough, uncapsulated and avirulent.", "accept": [["S", "smooth"], ["R", "rough"]], "c": "Discovery", "p": 1}, {"t": "fill", "q": "Avery&rsquo;s team treated the extract separately with protease, RNase and ____ &mdash; only that one abolished ____.", "accept": [["DNase", "deoxyribonuclease"], ["transformation"]], "c": "Discovery", "p": 1}, {"t": "fill", "q": "The double helix was described in the 1950s by James Watson, Francis ____ and Rosalind ____, using ____ diffraction.", "accept": [["Crick"], ["Franklin"], ["X-ray", "xray"]], "c": "Discovery", "p": 0}, {"t": "fill", "q": "Complete the complementary strand: 5′-ATGCAA-3′ pairs with 3′-____-5′.", "accept": [["TACGTT", "TAC GTT", "3 TACGTT 5"]], "c": "DNA Structure", "p": 1, "quiz": true}, {"t": "fill", "q": "DnaA binds the ____-base repeats of oriC; ____ is the helicase and ____ is the primase.", "accept": [["9", "nine"], ["DnaB", "dna b"], ["DnaG", "dna g"]], "c": "Initiation", "p": 1}, {"t": "fill", "q": "The ____ strand is copied continuously, while the ____ strand is built as short ____ fragments.", "accept": [["leading"], ["lagging"], ["Okazaki"]], "c": "Elongation", "p": 1}, {"t": "fill", "q": "DNA polymerase ____ removes the RNA primer and fills the gap; DNA ____ then seals the nick.", "accept": [["I", "1", "one"], ["ligase"]], "c": "Elongation", "p": 1}, {"t": "fill", "q": "____ proteins bind the ____ sites to arrest the forks, and ____ then separates the two daughter circles.", "accept": [["Tus"], ["ter"], ["topoisomerase", "topoisomerase II", "topoisomerase 2"]], "c": "Termination", "p": 1}, {"t": "table", "title": "★ DNA vs RNA &mdash; the guaranteed question", "headers": ["Feature", "DNA", "RNA"], "rows": [["Sugar", {"a": ["deoxyribose"], "mode": "contains"}, {"a": ["ribose"], "mode": "contains"}], ["Base that differs", {"a": ["thymine"], "mode": "contains"}, {"a": ["uracil"], "mode": "contains"}], ["Strands", {"a": ["double-stranded", "double"], "mode": "contains"}, {"a": ["single-stranded", "single"], "mode": "contains"}], ["Process (he wants this)", {"a": ["replicated", "replicat"], "mode": "contains"}, {"a": ["transcribed", "transcri"], "mode": "contains"}], ["Role", {"a": ["permanent store", "permanent", "hereditary"], "mode": "contains"}, {"a": ["working copy", "working", "temporary", "short"], "mode": "contains"}], ["Location in eukaryotes", {"a": ["nucleus"], "mode": "contains"}, {"a": ["cytoplasm"], "mode": "contains"}]], "c": "DNA vs RNA", "p": 1, "note": "One or two words per cell is enough.", "quiz": true}, {"t": "table", "title": "★ Who does what in bacterial DNA replication", "headers": ["Protein / enzyme", "Its job"], "rows": [["DnaA", {"a": ["binds the 9-base repeats", "9", "origin", "oric"], "mode": "contains"}], ["DnaB", {"a": ["helicase", "unwind", "open"], "mode": "contains"}], ["DnaC", {"a": ["helicase loader", "loader", "loads", "recruit"], "mode": "contains"}], ["DnaG", {"a": ["primase", "primer"], "mode": "contains"}], ["SSB proteins", {"a": ["stop re-annealing and protect from nucleases", "anneal", "apart", "protect", "nuclease"], "mode": "contains"}], ["DNA polymerase III", {"a": ["synthesises the new strand", "synthesi", "extend", "new dna", "polymeri"], "mode": "contains"}], ["DNA polymerase I", {"a": ["removes the primer and fills the gap", "primer", "remove", "fill"], "mode": "contains"}], ["DNA ligase", {"a": ["seals the nick", "seal", "nick", "join", "link"], "mode": "contains"}], ["Tus", {"a": ["binds ter and stops the fork", "ter", "stop", "arrest"], "mode": "contains"}], ["Topoisomerase", {"a": ["separates the daughter circles", "separat", "untangle", "cut", "decatenat"], "mode": "contains"}]], "c": "Elongation", "p": 1, "note": "A few words per cell &mdash; the function, not a sentence."}], CATS=["Discovery", "DNA vs RNA", "DNA Structure", "Genome Packaging", "Initiation", "Elongation", "Termination"];
+const STORE="bio2ee3_ch7_anki_v1", MASTER=4, EXAMK="bio2ee3_ch7_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>

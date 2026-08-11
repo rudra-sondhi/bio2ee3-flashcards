@@ -1,0 +1,370 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Microbial Ecosystems Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>Microbial Ecosystems</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Focus: the timeline of life · history figures · the three domains · macromolecules · endosymbiosis · origin of life</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "qa", "q": "Describe a microbial ecosystem. <i>(He said outright that he can ask you this.)</i>", "a": "A <b>community of organisms living in a specified area, interacting with each other and with the environment</b>.<br>It includes <b>biotic factors</b> (other organisms &mdash; living things) and <b>abiotic factors</b> (minerals, gases, water; he adds soil).<br><i>He said: &ldquo;that&rsquo;s something that you need to memorize, because I can ask you to describe microbial ecosystems.&rdquo;</i> For full marks, go on to the three community roles and guilds.", "c": "Ecosystem Basics", "p": 1, "quiz": true, "img": null}, {"t": "qa", "q": "The community of organisms in an ecosystem splits into which three functional roles?", "a": "<b>Primary producers</b> &mdash; capture energy through photosynthesis (autotrophs that make their own food).<br><b>Consumers</b> &mdash; heterotrophic organisms that ingest and utilise stored photosynthetic energy.<br><b>Decomposers</b> &mdash; recycle components back into the environment. He adds that <b>fungi are among the best decomposers</b>.", "c": "Ecosystem Basics", "p": 1, "img": null}, {"t": "mc", "q": "Members of a community grouped together because they carry out similar processes are called:", "options": ["Guilds", "Niches", "Biomes", "Horizons"], "ans": 0, "why": "A guild is a <b>functional group</b> within the community. A niche is the role of a single organism; a biome is a category of ecosystem; horizons are soil layers.", "c": "Ecosystem Basics", "p": 1}, {"t": "qa", "q": "Define a niche.", "a": "The <b>specific functional role of an organism within an ecosystem</b>. It includes the organism&rsquo;s physiological interactions with its <b>physical habitat</b> and with <b>other co-existing organisms</b>.", "c": "Ecosystem Basics", "p": 1, "img": null}, {"t": "qa", "q": "State the general rule in ecology governing niches.", "a": "<b>All possible niches must be occupied, and no two populations of organisms can occupy the same niche and co-exist sustainably.</b><br><i>He states it twice in three sentences, then calls it &lsquo;the rule&rsquo;: &ldquo;Important, guys, I can play around with this.&rdquo;</i> Expect it as a true/false, a which-statement-is-correct, or a short scenario.", "c": "Ecosystem Basics", "p": 1, "img": null}, {"t": "mc", "q": "Which statement about niches is correct?", "options": ["Two populations can share a niche as long as the habitat is large enough", "No two populations of organisms can occupy the same niche and co-exist sustainably, and all possible niches must be occupied", "A niche is the physical space an organism occupies, not its role", "Niches apply to plants and animals but not to microbes"], "ans": 1, "why": "His rule, both halves of it. A niche is a <b>functional role</b>, not a place &mdash; and two populations sharing one niche cannot co-exist sustainably.", "c": "Ecosystem Basics", "p": 1}, {"t": "fill", "q": "An ecosystem includes ____ factors (other organisms) and ____ factors (minerals, gases, water); community members that carry out similar processes are grouped into functional groups called ____.", "accept": [["biotic"], ["abiotic"], ["guilds", "guild", "functional guilds"]], "c": "Ecosystem Basics", "p": 1}, {"t": "qa", "q": "Why do microbes live in microenvironments, and why does that matter?", "a": "Because microbes are <b>very small</b>, they tend to exist in <b>microenvironments</b> where conditions can change <b>dramatically over very short distances</b>. Success in occupying a particular niche then depends on the organism&rsquo;s ability to obtain the nutrients it needs to produce energy and biomass.", "c": "Ecosystem Basics", "p": 0, "img": null}, {"t": "qa", "q": "Define a biofilm.", "a": "<b>Groups or layers of microbes on a surface that interact with and support each other.</b><br>Biofilms are all around us &mdash; <b>plaque on the surface of teeth</b>, <b>slime on rocks in a stream</b>, and (verbally) inside large industrial water containers, where getting rid of them is very difficult.", "c": "Biofilms", "p": 1, "img": null}, {"t": "qa", "q": "Describe the formation of a biofilm from step 1 to step 5.", "a": "<b>1.</b> <b>Adhesion by a primary colonizer</b> occurs &mdash; formation often begins with <b>appendaged bacteria</b> (which reproduce by <b>budding</b>) forming the primary layer on a surface.<br><b>2.</b> <b>Cells divide</b>, producing a <b>microcolony</b>.<br><b>3.</b> The microcolony <b>produces and secretes exopolysaccharide (EPS)</b>.<br><b>4.</b> <b>Introduction of secondary colonizers</b> and growth of the biofilm community &mdash; a <b>mature biofilm</b> contains more than just two types of microbe.<br><b>5.</b> <b>Established biofilm structure</b>, with nutrient gradients, distinct distribution of species, and dispersing cells.<br><i>He said: &ldquo;a very good, simple, but contains a lot of good information&hellip; an easy question to answer. Please understand the whole thing from step one to step 5, and those bold words are important.&rdquo;</i>", "c": "Biofilms", "p": 1, "quiz": true, "img": null}, {"t": "fill", "q": "Biofilm formation: adhesion by a ____ colonizer &rarr; cells divide into a ____ &rarr; secretion of ____ &rarr; introduction of ____ colonizers &rarr; established biofilm structure.", "accept": [["primary"], ["microcolony", "micro colony", "microcolonies"], ["eps", "exopolysaccharide", "exopolysaccharides"], ["secondary"]], "c": "Biofilms", "p": 1}, {"t": "qa", "q": "What two jobs does EPS (exopolysaccharide) do in a biofilm?", "a": "<b>1. It protects the biofilm.</b><br><b>2. It forms water-filled channels that transport nutrients and wastes.</b><br>His analogy: EPS is like a <b>mesh</b> &mdash; robust and resistant to physical forces &mdash; and the mesh is what creates the channels. This sits inside the flagged step 1&ndash;5 block, so it is examinable with it.", "c": "Biofilms", "p": 1, "img": null}, {"t": "mc", "q": "Biofilm formation often begins with which cells?", "options": ["Appendaged bacteria that reproduce by budding &mdash; the primary colonizers", "Secondary colonizers arriving out of the bulk fluid", "Fungal hyphae that anchor the mat to the surface", "Dispersing cells released from a nearby mature biofilm"], "ans": 0, "why": "Step 1 is <b>adhesion by a primary colonizer</b>: appendaged, budding bacteria form the primary layer on the bare surface.", "c": "Biofilms", "p": 1}, {"t": "mc", "q": "What distinguishes secondary colonizers from primary colonizers?", "options": ["They are the later joiners that give the biofilm its multi-species character", "They attach to the bare surface first", "They are always fungi rather than bacteria", "They are the only cells that secrete EPS"], "ans": 0, "why": "Primary = budding/appendaged bacteria on the bare surface. Secondary = joiners arriving after EPS production, which is why a <b>mature biofilm contains more than just two types of microbe</b>.", "c": "Biofilms", "p": 1}, {"t": "qa", "q": "Why is life in a biofilm an advantage for microbes?", "a": "<b>Nutrients often bind to solid surfaces</b>, so a biofilm sustains <b>higher cell concentrations than typically exist in bulk fluid</b>.<br>Verbally he adds <b>protection</b>: the biofilm is a robust environment the microbes build for themselves, shielding them from physical forces (chewing, saliva enzymes) and from antibiotics &mdash; which is why gum and teeth infections are treated with <b>more than one antibiotic plus a mouthwash</b>.", "c": "Biofilms", "p": 1, "img": null}, {"t": "qa", "q": "Why do we need cultivation-independent techniques?", "a": "Because <b>microbes do not exist in pure cultures</b> and the estimated number of <b>culturable</b> microbes is <b>very low</b>.<br>His two specific reasons: <b>(1) clinical urgency</b> &mdash; a patient not responding to antibiotics/antivirals needs a rapid ID from a lung or urinary sample by PCR and database comparison; <b>(2) unculturable organisms</b> &mdash; e.g. archaea from the deep ocean or extreme high-temperature habitats whose growth conditions cannot be reproduced in the lab.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "mc", "q": "Which of the following is NOT one of the cultivation-independent techniques examinable in this chapter?", "options": ["Fluorescence in situ hybridisation (FISH)", "Direct sequencing", "DGGE", "Metagenomics"], "ans": 0, "why": "Exactly three are on the deck &mdash; <b>direct sequencing, DGGE and metagenomics</b>. He removed the others: &ldquo;these are enough for [an] introduction to microbiology and biotechnology course.&rdquo;", "c": "Community Analysis", "p": 1}, {"t": "qa", "q": "What is an enrichment culture, and why is it needed?", "a": "<b>Enrichment methods promote the growth of desired microbes over undesired cells.</b> It is needed because, in a mixed population, the microbes you want may <b>grow slowly or be rare</b>.<br><i>He said this is basic microbiology, not only ecology: &ldquo;that&rsquo;s something that you need to know.&rdquo;</i>", "c": "Community Analysis", "p": 1, "img": null}, {"t": "mc", "q": "His enrichment for nitrogen fixers uses mineral salts + mannitol with NO added nitrogen source, plugged with cotton. Why does it work?", "options": ["N<sub>2</sub> and O<sub>2</sub> enter from the air, so only organisms that can fix atmospheric N<sub>2</sub> grow &mdash; Azotobacter comes to dominate", "Mannitol is selectively toxic to non-fixing bacteria", "The cotton excludes oxygen, so only anaerobes survive", "Added nitrogen would inactivate the mineral salts"], "ans": 0, "why": "Organisms that cannot fix N<sub>2</sub> have no available nitrogen source, so they die or sit dormant. Plating on the same nitrogen-free medium then isolates the fixers.", "c": "Community Analysis", "p": 1}, {"t": "qa", "q": "What is a Winogradsky column, and what does it demonstrate?", "a": "<b>Pond or lake mud in a cylinder</b>, with <b>carbon</b> (e.g. straw) and <b>sulfur</b> (e.g. eggs) added, placed in <b>sunlight</b>.<br>Different microbes proliferate in different zones: <b>cyanobacteria at the top performing oxygenic photosynthesis</b>, <b>purple sulfur bacteria below performing anoxygenic (anoxic) photosynthesis</b>, and deeper still green sulfur bacteria and fermenters where there is no oxygen at all.<br>Gradients: <b>oxygen high at the top, basically zero at the bottom; sulfur low at the top, high at the bottom</b>.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "fill", "q": "In a Winogradsky column, ____ at the top carry out ____ photosynthesis, while purple sulfur bacteria below carry out ____ photosynthesis.", "accept": [["cyanobacteria", "cyanobacterium"], ["oxygenic"], ["anoxygenic", "anoxic"]], "c": "Community Analysis", "p": 0}, {"t": "qa", "q": "Outline the direct-sequencing workflow.", "a": "<b>Extract DNA</b> from an environmental sample &rarr; use it as the <b>template for PCR with SSU rRNA gene primers</b> &rarr; <b>sequence</b> the product &rarr; <b>compare the sequence to databases of known sequences</b> for identification (<b>GenBank</b>, a public database).<br>No growth and no cloning are required &mdash; that is what makes it cultivation-independent.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "qa", "q": "Why is the SSU rRNA gene the target used to identify environmental organisms?", "a": "It contains several <b>highly conserved regions</b> &mdash; which <b>universal primers</b> (working for all organisms) can bind &mdash; together with <b>highly variable or hypervariable regions</b>.<br><b>Dissimilarity in the hypervariable regions allows determination of the phylogenetic relationships among organisms.</b>", "c": "Community Analysis", "p": 1, "img": null}, {"t": "fill", "q": "Direct sequencing amplifies the ____ rRNA gene using ____ primers that work for all organisms, then compares the result against a public database such as ____.", "accept": [["ssu", "small subunit", "16s"], ["universal"], ["genbank", "gene bank"]], "c": "Community Analysis", "p": 1}, {"t": "qa", "q": "What is DGGE, and how does it separate DNA?", "a": "<b>Denaturing gradient gel electrophoresis &mdash; an indirect method for characterizing microbial ecosystems</b> (his exact phrasing: &ldquo;keep in your mind&rdquo;).<br>Separation is based on the <b>variability of DNA sequences in different microorganisms</b>: high-temperature polyacrylamide gel electrophoresis of <b>PCR products of 200&ndash;700 bp</b>, run in a <b>gradient of chemical denaturants</b>. When a double-stranded fragment begins to <b>denature</b>, the single-stranded structure <b>no longer migrates</b> in the gel.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "mc", "q": "Which technique CANNOT identify an organism down to species?", "options": ["DGGE", "Direct sequencing using SSU rRNA primers", "Sequence-driven metagenomic analysis", "Function-driven analysis followed by sequencing of the clone"], "ans": 0, "why": "DGGE is <b>indirect</b>: &ldquo;you cannot see the sequence&hellip; what you do is just compare the community.&rdquo; It shows larger-scale differences <b>without identifying each base</b> &mdash; identical banding patterns mean similar organisms.", "c": "Community Analysis", "p": 1}, {"t": "qa", "q": "What is metagenomics, and what are the main steps of the workflow?", "a": "<b>DNA from an environmental sample is used to construct a genomic library</b>; genes from that community library can then be identified, screened and compared to other areas.<br>Extract and <b>pool the community DNA</b> &rarr; cut the <b>vector and the sample DNA with the same restriction enzymes</b>, giving matching <b>sticky ends</b> (&ldquo;like a puzzle edge&rdquo;) &rarr; <b>ligate</b> into plasmids, because linear naked DNA is unstable and prone to exonucleases &rarr; <b>transform E. coli</b> host cells to produce the <b>metagenomic library</b>.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "qa", "q": "Distinguish sequence-driven from function-driven metagenomic analysis.", "a": "<b>Sequence-driven</b> &mdash; DNA is extracted and sequenced; bioinformatic tools assemble and annotate the sequences, identifying genes and their potential roles.<br><b>Function-driven</b> &mdash; the host organisms carrying the cloned fragments are <b>screened for a specific function</b> (e.g. enzyme activity), and only then is the corresponding gene sequenced and analysed.<br>Sequence first then infer function, versus screen for the phenotype first then go and find the gene.", "c": "Community Analysis", "p": 1, "img": null}, {"t": "mc", "q": "A researcher screened E. coli clones from a sewage metagenomic library on real plastic, found the one clone that degraded it, then sequenced its plasmid and identified a PET-degrading enzyme. This is:", "options": ["Function-driven analysis", "Sequence-driven analysis", "An enrichment culture", "DGGE"], "ans": 0, "why": "The <b>phenotype came first, the gene second</b>. His punchline: &ldquo;he didn&rsquo;t care about the bacteria &mdash; he was focusing on the genes.&rdquo;", "c": "Community Analysis", "p": 0}, {"t": "qa", "q": "Give the headline facts about marine ecosystems, and define oligotrophy.", "a": "An aquatic planet &mdash; <b>70% water</b>, most of it in the oceans &mdash; and <b>over 98% of the ocean&rsquo;s biomass is microbial</b> (viruses, bacteria, archaea).<br>Most of those microbes exist in <b>oligotrophy: using nutrients at very low concentrations</b>. &ldquo;Most life in marine ecosystems are oligotrophs&rdquo; is on the summary slide he told you to read.", "c": "Aquatic", "p": 1, "img": null}, {"t": "qa", "q": "How does a marine dead zone form?", "a": "<b>Overfeeding</b> marine microbes with a nutrient influx (<b>N, P</b>) stimulates the growth of <b>algae and cyanobacteria</b>; when they die, <b>aerobic heterotrophs</b> grow rapidly and <b>consume the O<sub>2</sub></b>, producing <b>anoxic water</b>.<br>A <b>dead zone</b> is an area without enough oxygen to support much eukaryal life.", "c": "Aquatic", "p": 1, "img": null}, {"t": "qa", "q": "Who lives in the ocean surface zone, and what do they contribute?", "a": "<b>Phytoplankton</b> &mdash; prokaryotic (mostly <b>cyanobacteria</b>) and eukaryotic (<b>diatoms, dinoflagellates, green algae</b>). They are the <b>primary producers that support all other life in the ocean</b>.<br>During photosynthesis they <b>oxygenate the water</b>, and many cyanobacteria also <b>fix N<sub>2</sub></b>, increasing the nitrogen available in the system.", "c": "Aquatic", "p": 1, "img": null}, {"t": "mc", "q": "Which statement correctly separates phytoplankton from zooplankton?", "options": ["Phytoplankton are photosynthetic primary producers; zooplankton are non-photosynthetic grazers", "Phytoplankton are eukaryotic; zooplankton are prokaryotic", "Phytoplankton live in the deep zone; zooplankton live at the surface", "Both are primary producers, but only zooplankton fix nitrogen"], "ans": 0, "why": "Non-photosynthetic zooplankton (<b>protists, small crustaceans</b> &mdash; his gloss: arthropods, like small shrimps) <b>graze on the primary producers</b>.", "c": "Aquatic", "p": 1}, {"t": "qa", "q": "How are carbon and energy distributed from the ocean surface into the deeper zones?", "a": "By <b>zooplankton grazing</b> on phytoplankton and by <b>viral-mediated lysis</b>.<br>In the <b>dark mid-water zone</b> photosynthesis is not possible (light cannot penetrate), so <b>organic matter made by phytoplankton feeds the zooplankton below</b>, and <b>viral lysis of phytoplankton releases nutrients</b> for heterotrophic microbes.", "c": "Aquatic", "p": 0, "img": null}, {"t": "qa", "q": "Give the deep-sea numbers he flagged as important.", "a": "Approximately <b>1% of primary production reaches the seafloor</b>.<br>Average seafloor depth <b>3,500 m</b>.<br>Deepest spot known <b>11,000 m &mdash; the Mariana Trench</b> (he adds: western Pacific).<br>Pressure there is <b>1,000 &times; that at sea level</b> (sea level = 1 atm).<br>With increasing depth, <b>archaea become relatively more abundant than bacteria</b>.", "c": "Aquatic", "p": 1, "img": null}, {"t": "fill", "q": "Average seafloor depth is ____ m; the deepest known point is the ____ Trench at ____ m, where the pressure is ____ times that at sea level.", "accept": [["3500", "3 500"], ["mariana", "marianas"], ["11000", "11 000"], ["1000", "1 000"]], "c": "Aquatic", "p": 1}, {"t": "mc", "q": "Which pair of terms refers to exactly the same organisms?", "options": ["Piezophile and barophile", "Phytoplankton and zooplankton", "Epilimnion and hypolimnion", "Oxygenic and anoxygenic photosynthesis"], "ans": 0, "why": "<b>Piezophiles (= barophiles)</b> are microbes that <b>withstand &mdash; and sometimes require &mdash; intense pressure to grow</b>. He notes he used to say barophiles; the other three pairs are opposites, not synonyms.", "c": "Aquatic", "p": 1}, {"t": "qa", "q": "What do we know about the viruses of the oceans?", "a": "Probably <b>10 times more viruses exist in the oceans than other microbes</b>, and <b>little is known</b> about them, their reproduction cycles or their ecological impacts.<br><b>Viruses of cyanobacteria dominate the surface zone</b>, and most likely <b>liberate nutrients from cyanobacteria</b>, making them available to heterotrophic microbes in deeper waters.<br><i>Excluded: the viral biomass and abundance statistics.</i>", "c": "Aquatic", "p": 1, "img": null}, {"t": "qa", "q": "What is stratification in a freshwater lake, and why does it matter?", "a": "<b>Separation into oxic and anoxic layers</b>, caused by the <b>temperature-dependent density of water</b>. It may be <b>seasonal or permanent</b>, and <b>the layers dictate what can grow and where</b> &mdash; which he calls very important (oxygen presence/absence plus temperature, roughly 20&nbsp;&deg;C at the top down to ~4&nbsp;&deg;C at the bottom).<br>Freshwater is also <b>much higher in nutrients than marine water</b>, because of organic matter from <b>land runoff</b> &mdash; so it is less oligotrophic.", "c": "Aquatic", "p": 1, "img": null}, {"t": "fill", "q": "A stratified lake has the warm, oxic ____ on top, the ____ in the middle, and the cold, anoxic ____ below.", "accept": [["epilimnion"], ["thermocline"], ["hypolimnion"]], "c": "Aquatic", "p": 1}, {"t": "mc", "q": "Which layer of a stratified lake is NOT oxic?", "options": ["Hypolimnion", "Epilimnion", "Thermocline", "The surface film"], "ans": 0, "why": "<b>Epi-</b> = upper, warmer, aerobic/oxic. <b>Hypo-</b> = lower, colder, anoxygenic/anoxic. The <b>thermocline</b> is the transition layer between them.", "c": "Aquatic", "p": 1}, {"t": "qa", "q": "What happens when a stratified lake mixes in spring and autumn?", "a": "Seasonal temperature fluctuations cause <b>mixing of the layers and removal of growth limitations</b>. This can result in <b>algal / cyanobacterial blooms</b>, and those blooms can cause <b>anoxia and fish kills</b> in freshwater environments.", "c": "Aquatic", "p": 1, "img": null}, {"t": "mc", "q": "Biomes are categories of ecosystems based on what &mdash; and what distinguishes one from another?", "options": ["Vegetation characteristics; distinguished by temperature and precipitation", "Soil horizon depth; distinguished by bedrock type", "Dominant microbial phyla; distinguished by pH", "Latitude alone"], "ans": 0, "why": "<b>Biomes = categories of ecosystems based on vegetation characteristics</b>, and it is <b>temperature and precipitation</b> that distinguish one biome from another. On land the dominant primary producers are photoautotrophic plants, which supply the soil via microbial decomposition and root exudates.", "c": "Soil & Rhizosphere", "p": 0}, {"t": "qa", "q": "What is distinctive about soil as a microbial ecosystem, and how does soil form?", "a": "Soils <b>contain more microbial diversity and activity than any other microbial ecosystem</b> &mdash; that superlative is the examinable claim (&ldquo;these are important&rdquo;).<br>Soil forms through <b>microbial decomposition of plant and animal matter</b>, combined with <b>abiotic minerals</b> and <b>excreted nutrients from plant roots</b>.", "c": "Soil & Rhizosphere", "p": 1, "img": null}, {"t": "mc", "q": "Where is organic matter highest in a soil profile?", "options": ["In the upper levels, decreasing with increasing depth", "Spread evenly through all horizons", "Immediately above the bedrock", "At the water table"], "ans": 0, "why": "Soils form <b>horizons</b> &mdash; layers based on physical type and characteristics. In his words the <b>A horizon</b> has the most organic matter, with <b>bedrock at the bottom</b>.", "c": "Soil & Rhizosphere", "p": 1}, {"t": "qa", "q": "What determines soil structure, and what are the binding agents?", "a": "<b>Aggregation / clumping</b> of soil determines its structure. Binding agents include <b>microbial substances</b> and <b>humic material</b> from the incomplete breakdown of plant biomass.<br><b>Lignin / lignocellulose</b> (a macromolecule of covalently linked phenolic-alcohol molecules) <b>resists degradation</b> by many microorganisms and becomes one of the major components of humic material. Microbes themselves aggregate <b>near soil pores</b> for better access to nutrients and moisture.", "c": "Soil & Rhizosphere", "p": 0, "img": null}, {"t": "qa", "q": "Define the rhizosphere. Why does it carry more microbes than bulk soil?", "a": "The area of soil <b>immediately surrounding plant roots</b>, possessing large amounts of <b>organic carbon due to root exudates</b> (sugars, amino acids, other organics).<br>Because of that <b>excess carbon</b> it holds <b>higher numbers of microbes than bulk soil</b>, and a <b>complex symbiosis</b> develops between plants and microbes there. Bulk soil is everything away from the roots, with far fewer microbes.", "c": "Soil & Rhizosphere", "p": 1, "img": null}, {"t": "qa", "q": "List the benefits that microbes provide to plants in the rhizosphere.", "a": "<b>1. Production of phytohormones</b> that stimulate growth.<br><b>2. Production of antibiotics</b> to control plant pathogens &mdash; many plant pathogens are themselves microbes that beneficial microbes can control or kill.<br><b>3. Fixation of atmospheric nitrogen</b> into a form usable by plants, which the roots take up.<br><b>4. Solubilization of phosphate</b> so it can be taken up by plant roots &mdash; phosphate is otherwise insoluble.<br>Frame it reciprocally: the plant supplies <b>root exudates</b>, and <b>promotion of plant growth means more carbon for the microbes</b> &mdash; a mutual relationship.<br><i>He said: &ldquo;these are the 1, 2, 3, 4 benefits of the microbes to the plant. Very good candidate for the final exam.&rdquo;</i>", "c": "Soil & Rhizosphere", "p": 1, "img": null}, {"t": "fill", "q": "Rhizosphere microbes give plants: ____ that stimulate growth, ____ that control plant pathogens, fixation of atmospheric ____, and solubilization of ____.", "accept": [["phytohormones", "phytohormone", "hormones"], ["antibiotics", "antibiotic"], ["nitrogen", "n2"], ["phosphate", "phosphates", "phosphorus"]], "c": "Soil & Rhizosphere", "p": 1}, {"t": "mc", "q": "Which of the following is NOT one of the four benefits microbes provide to plants in the rhizosphere?", "options": ["Secretion of root exudates such as sugars and amino acids", "Production of phytohormones that stimulate growth", "Fixation of atmospheric nitrogen into a usable form", "Solubilization of phosphate for uptake by the roots"], "ans": 0, "why": "Root exudates run the <b>other way</b> &mdash; the plant supplies them and the microbes benefit. The fourth microbial benefit is <b>production of antibiotics</b> against plant pathogens.", "c": "Soil & Rhizosphere", "p": 1}, {"t": "qa", "q": "Which microbes do the heavy decomposition in soil?", "a": "<b>Fungi</b> are especially efficient at degrading tough organic materials into <b>humic substances</b>; <b>white rot and brown rot basidiomycetes</b> specialise in breaking down <b>lignocellulose</b>.<br><b>Actinomycetes</b> (bacteria) are good at degrading much of the plant organic matter, which provides them with ample nutrients.", "c": "Soil & Rhizosphere", "p": 1, "img": null}, {"t": "mc", "q": "Basidiomycetes versus actinomycetes &mdash; which statement is correct?", "options": ["Basidiomycetes are fungi specialising in lignocellulose; actinomycetes are bacteria degrading plant organic matter generally", "Both are fungi &mdash; basidiomycetes take lignin, actinomycetes take cellulose", "Basidiomycetes are bacteria; actinomycetes are fungi", "Both are bacteria, and both are restricted to humic material"], "ans": 0, "why": "Two different domains, two different substrate scopes. White rot and brown rot <b>basidiomycetes</b> are the <b>lignocellulose</b> specialists.", "c": "Soil & Rhizosphere", "p": 1}, {"t": "qa", "q": "Define bioremediation and give the classic example.", "a": "The <b>use of microbes to consume and remove human-made materials from soil</b> (verbally he extends it to water too).<br>Classic example: <b>hydrocarbon-degrading microbes in petroleum-contaminated areas</b> &mdash; the before/after images show plant cover, growth rate and diversity all recovering.<br>Important targets to recognise by acronym: <b>TNT, PCBs, TCE, PAHs</b> &mdash; <i>their full chemical names and structures are explicitly excluded.</i>", "c": "Bioremediation", "p": 1, "img": null}, {"t": "mc", "q": "What is a xenobiotic?", "options": ["A chemical not normally found in nature, which microbes find difficult to degrade quickly", "Any carbon source a microbe is unable to use", "A microbe introduced into an ecosystem it did not evolve in", "A nutrient added to stimulate a broad degradation pathway"], "ans": 0, "why": "Xenobiotics are the targets that biostimulation, cometabolism and bioaugmentation are designed to deal with.", "c": "Bioremediation", "p": 1}, {"t": "qa", "q": "Distinguish biostimulation, cometabolism and bioaugmentation.", "a": "<b>Biostimulation</b> &mdash; <b>oxygen and limiting nutrients</b> are provided in abundance to promote microbe activity.<br><b>Cometabolism</b> &mdash; addition of a <b>nutrient</b> that stimulates a <b>broad substrate-range degradation pathway</b>.<br><b>Bioaugmentation</b> &mdash; specific addition of a <b>known degrading microbe</b> to a contaminated environment.<br><i>His one-line discriminator: &ldquo;don&rsquo;t confuse between these two &mdash; addition of the nutrients, or addition of the microbes.&rdquo; Cometabolism = NUTRIENT. Bioaugmentation = MICROBE.</i>", "c": "Bioremediation", "p": 1, "img": null}, {"t": "table", "title": "★ Bioremediation strategies &mdash; what you add", "headers": ["Strategy", "What you add", "Slide definition"], "rows": [["Biostimulation", {"a": ["oxygen", "nutrient"], "mode": "contains"}, "Oxygen and limiting nutrients provided in abundance to promote microbe activity"], ["Cometabolism", {"a": ["nutrient"], "mode": "contains"}, {"a": ["broad substrate", "broad"], "mode": "contains"}], ["Bioaugmentation", {"a": ["microbe", "bacteria", "organism"], "mode": "contains"}, "Specific addition of a known degrading microbe to a contaminated environment"]], "c": "Bioremediation", "p": 1, "note": "All three treat xenobiotics &mdash; they differ only in what is added. One or two words per blank."}, {"t": "mc", "q": "Which strategy involves adding a known degrading microbe to the contaminated site?", "options": ["Bioaugmentation", "Cometabolism", "Biostimulation", "Enrichment culture"], "ans": 0, "why": "His discriminator is <b>nutrient versus microbe</b>: cometabolism adds a <b>nutrient</b> that stimulates a broad substrate-range pathway; bioaugmentation adds the <b>microbe</b> itself.", "c": "Bioremediation", "p": 1}, {"t": "qa", "q": "How can ecosystems exist in the absence of photosynthesis-driven primary production?", "a": "They rely on <b>bacterial and archaeal chemolithoautotrophic primary producers that harvest chemical energy</b>; <b>respiring microbes then utilise the organics</b> those chemolithoautotrophs make.<br>Nutrients also reach lightless areas from surface primary producers by <b>groundwater flow and sedimentation</b>. It is estimated that there is <b>more total biomass in subsurface habitats than above ground</b>, and much of it is still metabolically active.", "c": "Deep & Geothermal", "p": 1, "img": null}, {"t": "mc", "q": "A chemolithoautotroph obtains its energy and its carbon from:", "options": ["Chemical energy from inorganic compounds, with CO<sub>2</sub> as its carbon source", "Light, with CO<sub>2</sub> as its carbon source", "Organic matter, for both energy and carbon", "Light for energy and organic matter for carbon"], "ans": 0, "why": "This is the primary-producer metabolism of lightless ecosystems &mdash; e.g. <b>sulfur-oxidizing bacteria</b> at hydrothermal vents using <b>H<sub>2</sub>S</b> to drive carbon fixation.", "c": "Deep & Geothermal", "p": 1}, {"t": "qa", "q": "Where have deep subsurface microbes been found?", "a": "In <b>deep-sea vents, hot springs, oil wells and goldmine subterranean rock</b>.<br>Samples taken from depths as great as <b>3 km below Earth&rsquo;s surface</b> have uncovered <b>novel and diverse species of bacteria and archaea</b>.", "c": "Deep & Geothermal", "p": 0, "img": null}, {"t": "qa", "q": "What powers a hydrothermal vent community?", "a": "One of the best-studied deep-area (ocean floor) community types. <b>Volcanic activity releases minerals and gases into the seawater</b> &mdash; CO<sub>2</sub>, CH<sub>4</sub>, <b>H<sub>2</sub>S</b>, metals.<br>Microbes use these inorganics as <b>primary energy and electron sources (H<sub>2</sub>S)</b> to <b>drive carbon fixation</b>. <b>Mats of microbes</b> then attract crustaceans, then larger invertebrates and vertebrates.", "c": "Deep & Geothermal", "p": 1, "img": null}, {"t": "qa", "q": "How does symbiosis at hydrothermal vents affect biodiversity?", "a": "Microbes may form <b>symbiotic relationships with eukaryal organisms</b>, <b>further increasing the biodiversity</b> of the community.<br>Worked example: <b>carbon and energy produced by sulfur-oxidizing bacteria support the growth of tube worms</b> &mdash; without those bacteria the tube worms could not exist.<br><i>He said: &ldquo;you need to just know that symbiosis or symbiotic relationships help the variety as well&hellip; without this, we don&rsquo;t have this.&rdquo;</i> No named taxonomy of symbiosis types is taught here.", "c": "Deep & Geothermal", "p": 1, "img": null}, {"t": "table", "title": "★ Communities powered by radiant vs chemical energy", "headers": ["", "Powered by radiant energy", "Powered by chemical energy"], "rows": [["Energy source", "Light", {"a": ["h2s", "hydrogen sulfide", "hydrogen sulphide", "sulfide"], "mode": "contains"}], ["Carbon source", {"a": ["co2", "carbon dioxide"], "mode": "contains"}, {"a": ["co2", "carbon dioxide"], "mode": "contains"}], ["Producer&rsquo;s metabolism", {"a": ["photosynthesis", "phototrophy"], "mode": "contains"}, {"a": ["chemolithoautotroph", "sulfur oxidizing", "sulphur oxidising"], "mode": "contains"}], ["Consumer in the figure", "Grasshopper", {"a": ["tube worm", "tubeworm"], "mode": "contains"}]], "c": "Deep & Geothermal", "p": 1, "note": "The comparison figure he walked through &mdash; same architecture, different energy source."}, {"t": "qa", "q": "Compare terrestrial hot springs under milder versus hotter, acidic conditions.", "a": "<b>Milder springs</b> &mdash; <b>mid-70&nbsp;&deg;C, neutral pH, access to sunlight</b> &rarr; primary production from <b>cyanobacteria</b>, which create <b>thick biofilm mats in the upper layers</b> (slide example: <b>Octopus Spring, Yellowstone National Park</b>).<br><b>Hotter, acidic springs</b> &mdash; conditions <b>kill photosynthetic microbes</b>, so <b>chemolithoautotrophs dominate</b> and <b>community diversity is low</b>.<br><i>He reads this slide without explaining it &mdash; by his own rule, that makes it pure memorisation.</i>", "c": "Deep & Geothermal", "p": 1, "img": null}, {"t": "fill", "q": "Milder hot springs (mid-____ &deg;C, neutral pH, sunlight) support ____ that build thick biofilm mats; in hotter, acidic springs ____ dominate and community diversity is low.", "accept": [["70", "70s"], ["cyanobacteria", "cyanobacterium"], ["chemolithoautotrophs", "chemolithoautotroph", "chemolithotrophs"]], "c": "Deep & Geothermal", "p": 1}], CATS=["Ecosystem Basics", "Biofilms", "Community Analysis", "Aquatic", "Soil & Rhizosphere", "Bioremediation", "Deep & Geothermal"];
+const STORE="bio2ee3_ecosystems_anki_v1", MASTER=4, EXAMK="bio2ee3_ecosystems_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>

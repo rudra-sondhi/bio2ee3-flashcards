@@ -1,0 +1,370 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Chapter 11 Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>Chapter 11 — Microbial Biotechnology II</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Focus: the timeline of life · history figures · the three domains · macromolecules · endosymbiosis · origin of life</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "qa", "q": "White (industrial) biotechnology — state the basic principle and the four headline examples.", "a": "Principle: use <b>microbial conversion of low-cost biomass</b> into products with a <b>higher value and industrial use</b>. The four examples: <b>biofuel production · bioplastics · industrial enzyme production · production of vitamins and amino acids</b>.", "c": "Biorefinery & Fuels", "p": 1, "img": null}, {"t": "qa", "q": "What is the biorefinery concept — what goes in, what happens, what comes out?", "a": "<b>Biorefinery</b> = converting <b>biomass</b> (living or recently living biological substance) into a number of products, including <b>chemicals, energy and materials</b>. Three-step logic: renewable biomass feedstock in &rarr; <b>microbial activities</b> act on the feedstock &rarr; useful materials harvested out. The <b>cellulose/hemicellulose fraction</b> of plant biomass is the starting material, and the biomass can be crop plants grown for the purpose or <b>agricultural and forestry waste</b> — sawdust, straw, grease. <i>His point: people think that waste is absolute garbage, but some microorganisms can use it — so we do not touch our natural resources.</i>", "c": "Biorefinery & Fuels", "p": 1, "img": null}, {"t": "qa", "q": "How is ethanol produced biologically, and why is it a reasonable fuel?", "a": "<b>Yeast ferment sugars</b> to produce ethanol during <b>ANAEROBIC fermentation</b> of sugars. Ethanol can be used in internal combustion engines <b>with little modification</b>, making it a reasonable alternative to gasoline and sparing finite resources. <i>He said: &ldquo;so this is very important.&rdquo;</i>", "c": "Biorefinery & Fuels", "p": 1, "img": null}, {"t": "mc", "q": "Even industrial yeast strains can only tolerate a maximum of how much ethanol?", "options": ["15%", "5%", "50%", "95%"], "ans": 0, "why": "15% is the slide figure. The auto-transcript renders it as 50% every single time — that is a speech-to-text error.", "c": "Biorefinery & Fuels", "p": 1}, {"t": "mc", "q": "What are the main limits on producing ethanol biologically?", "options": ["Commercial scaling and the cost of feedstock", "A worldwide shortage of yeast strains", "Ethanol cannot run in internal combustion engines", "Fermentation requires a constant oxygen supply"], "ans": 0, "why": "Commercial ethanol comes mostly from sugar and starch; cellulosic ethanol is still under development with some demonstration plants, and <b>pretreatment</b> — converting cellulose into a form alcohol-producing organisms can ferment — is central.", "c": "Biorefinery & Fuels", "p": 1}, {"t": "qa", "q": "★ What is cellulose? (This is the <i>only</i> thing he wants from that slide.)", "a": "<b>Cellulose is a polymer of glucose</b> (&beta;-1,4 linked). <i>He said: &ldquo;The only thing that I want you just to know is the cellulose. Cellulose is a polymer of the glucose, and not the rest. And of course the structure-wise, I never ask.&rdquo;</i> The lignin and hemicellulose definitions and every structure are explicitly excluded. Context worth one line: waste biomass is mostly lignin and cellulose, which are hard to break down, so lignocellulose is pretreated by enzymatic, chemical or physical methods to release the sugars that feed the microbes.", "c": "Biorefinery & Fuels", "p": 1, "img": null}, {"t": "fill", "q": "Yeast ferment sugars to ethanol during ____ fermentation, and even industrial strains tolerate at most ____ ethanol. Cellulose — the one polymer he wants defined — is a polymer of ____.", "accept": [["anaerobic", "anaerobically", "anaerobic conditions"], ["15%", "15", "15 percent"], ["glucose"]], "c": "Biorefinery & Fuels", "p": 1}, {"t": "qa", "q": "What are bioplastics, and what problem do they solve?", "a": "Microbes produce <b>biodegradable natural polyesters</b> as sources of <b>carbon and energy</b>, and these can replace conventional plastic. The problem: plastic use and buildup is tremendous because plastic is usually <b>non-biodegradable</b> — plastic washed up on a beach takes <b>~100–200 years</b> to degrade, <i>&ldquo;which is too late for us.&rdquo;</i> <i>He said: &ldquo;this is very important.&rdquo;</i>", "c": "Bioplastics", "p": 1, "img": null}, {"t": "qa", "q": "Name the two bioplastics on his slide and the organisms that make them.", "a": "<b>Polyhydroxybutyrate (PHB)</b> — from <b><i>Bacillus megaterium</i></b>. <b>Polyhydroxyalkanoates (PHAs)</b> — from <b>various microbes</b>. The diverse structures of the PHAs give a broad range of physical properties <b>similar to existing petroleum-based plastics</b>, which is why they can replace them; the bottleneck is scale, or engineering strains to make more.", "c": "Bioplastics", "p": 1, "img": null}, {"t": "mc", "q": "Under what conditions do bacterial cells accumulate PHB / PHA granules?", "options": ["Under stress or nutrient limitation, as a carbon and energy store", "During rapid growth on rich medium, as a waste product", "Only when the cell is infected by a phage", "Only in the complete absence of carbon"], "ans": 0, "why": "His mechanism: in case of stress, lack of nutrients or other special conditions, bacterial cells conserve energy — PHA deposits accumulate inside the cells as <b>carbon storage polymers</b>.", "c": "Bioplastics", "p": 1}, {"t": "qa", "q": "Industrial enzymes — what are they, and give his two consumer examples.", "a": "Enzymes = <b>biocatalysts</b>; many commercial products require them for production. (1) <b>Amylase</b> is used to produce <b>high-fructose corn syrup</b>, found in soft drinks and many foods. (2) <b>Laundry detergents</b> contain a mix of <b>lipases, amylases, proteases, glycosidases and oxidases</b> to enhance stain removal — the coloured granules in white powder detergent are the enzymes.", "c": "Enzymes & Vitamins", "p": 1, "img": null}, {"t": "qa", "q": "What does each of the five detergent enzymes break down?", "a": "<b>Proteases</b> — protein stains: blood, sweat, egg. <b>Lipases</b> — fats and oils. <b>Amylases</b> — starches: pasta, rice, some sauces. <b>Glycosidases</b> — sugars and carbohydrates. <b>Oxidases</b> — break down or chemically modify certain stain-causing molecules.", "c": "Enzymes & Vitamins", "p": 1, "img": null}, {"t": "table", "title": "★ Detergent enzymes — what each one attacks", "headers": ["Enzyme", "What it breaks down"], "rows": [["Proteases", {"a": ["protein", "blood", "sweat", "egg"], "mode": "contains"}], ["Lipases", {"a": ["fat", "oil", "lipid", "grease"], "mode": "contains"}], ["Amylases", {"a": ["starch", "pasta", "rice"], "mode": "contains"}], ["Glycosidases", {"a": ["sugar", "carbohydrate", "carb"], "mode": "contains"}], ["Oxidases", {"a": ["stain", "modify", "colour", "color"], "mode": "contains"}]], "c": "Enzymes & Vitamins", "p": 1, "note": "One word per cell is enough — his bracketed examples also count."}, {"t": "qa", "q": "★ Why are microbial enzymes favoured over chemical synthesis for vitamins, amino acids and pharmaceuticals?", "a": "Because they catalyse <b>stereospecific reactions</b> — <b>only L-isomers are produced</b>. Chemical synthesis gives a mixture of L and D that then has to be separated, so the microbial route means <b>less waste and less purification</b>. Fortified food products rely on large amounts of these compounds being made.", "c": "Enzymes & Vitamins", "p": 1, "img": null}, {"t": "qa", "q": "What does stereospecific mean, and why are enzymes stereospecific?", "a": "Stereospecific = the enzyme produces <b>one specific 3D form</b> of a molecule. Many molecules have two mirror-image forms, <b>L and D</b> (left and right isomers). The reason: an enzyme has a specific shape — an <b>active site</b> — that accommodates only one form of the substrate, so it binds and produces only that one form. <i>He added this block because it is not on the slide, and called the active-site argument &ldquo;the key.&rdquo;</i>", "c": "Enzymes & Vitamins", "p": 1, "img": null}, {"t": "mc", "q": "For many amino acids, which isomer is the desired biological form?", "options": ["The L isomer", "The D isomer", "Both equally", "Neither — only the racemic mixture is active"], "ans": 0, "why": "&ldquo;Keep it in your mind. L isomer is the preferable shape and form.&rdquo; Chemical synthesis yields an L + D mixture that must then be separated.", "c": "Enzymes & Vitamins", "p": 1}, {"t": "mc", "q": "Almost all commercially produced vitamin B12 — about 10 tons per year — is made by which organisms?", "options": ["<i>Pseudomonas</i> or <i>Propionibacterium</i> strains", "<i>Bacillus megaterium</i>", "Baker&rsquo;s yeast", "<i>Agrobacterium tumefaciens</i>"], "ans": 0, "why": "The chemical synthesis of vitamin B12 is extremely complicated, so essentially all of it is made microbially — 10 tons a year.", "c": "Enzymes & Vitamins", "p": 1}, {"t": "fill", "q": "Microbial enzymes are preferred because they catalyse ____ reactions, so only ____-isomers are produced. About ____ tons of vitamin B12 are made microbially each year.", "accept": [["stereospecific", "stereo specific", "stereo-specific"], ["L", "l isomer", "l-isomer"], ["10", "ten"]], "c": "Enzymes & Vitamins", "p": 1}, {"t": "mc", "q": "Which of these is <b>green</b> (agricultural) biotechnology rather than <b>white</b> (industrial) biotechnology?", "options": ["Bt insect-resistant corn", "Vitamin B12 from <i>Propionibacterium</i>", "PHB bioplastic from <i>Bacillus megaterium</i>", "Proteases in laundry detergent"], "ans": 0, "why": "White biotechnology converts low-cost biomass into industrial products; green biotechnology inserts genes into plants — the Bt crop is the agricultural one.", "c": "Green Biotech", "p": 0}, {"t": "qa", "q": "★★★ He drafted this out loud: &ldquo;Provide me with one example of the green biotechnology and briefly explain it, 5 marks.&rdquo; Which five examples are valid?", "a": "In the order he taught them: (1) <b>Agrobacterium-mediated transformation</b> — the enabling method; (2) <b>herbicide (Roundup) resistance</b> via a resistant EPSPS gene; (3) <b>insect resistance via Bt toxin</b>; (4) <b>Golden Rice / biofortification</b>; (5) <b>nitrogen-fixing cereals, RIPE and C4 rice</b> (forward-looking, the weakest). <b>Bt and Golden Rice are the two he re-flagged individually</b> — either is a complete 5-mark answer on its own. Close with the caveat printed on his slide: <i>these methods do have possible human health and environmental repercussions.</i>", "c": "Green Biotech", "p": 1, "quiz": true, "img": null}, {"t": "qa", "q": "★ Explain herbicide resistance in transgenic crops.", "a": "<b>Roundup</b> is a <b>broad-spectrum</b> herbicide — <i>&ldquo;broad spectrum means it can kill basically all of the plants&rdquo;</i> — and it poisons plants but <b>not mammals</b>. The agronomic problem: you spray to kill the weeds growing alongside your crop, but the crop is sensitive too and dies as well. The fix: <b>Monsanto</b> scientists introduced a plasmid containing a gene for a <b>Roundup-resistant EPSPS</b> enzyme into plants using <b>biolistics (a gene gun)</b>. The engineered crop survives while the weeds are killed, so farmers can spray year-round. <i>✂ The full name of EPSPS is explicitly not testable.</i>", "c": "Green Biotech", "p": 1, "img": null}, {"t": "mc", "q": "How was the Roundup-resistant EPSPS gene introduced into crop cells, and by whom?", "options": ["By a gene gun (biolistics), by Monsanto scientists", "By <i>Agrobacterium</i>, by Monsanto scientists", "By a gene gun, by Bayer scientists", "By protoplast fusion, by Monsanto scientists"], "ans": 0, "why": "&ldquo;You just need to know that scientists added the Roundup-resistant EPSPS gene to crop cells using a gene gun.&rdquo;", "c": "Green Biotech", "p": 1}, {"t": "qa", "q": "The last slide — the &ldquo;exciting possibilities.&rdquo; What are they?", "a": "(1) <b>Improved photosynthetic efficiency</b> in crop plants — the <b>RIPE</b> project and <b>C4 rice</b>. (2) <b>Engineering nitrogen-fixing cereal crops</b>, by three routes: <b>engineer nodule formation</b> (make cereals form root nodules that house nitrogen-fixing bacteria, as legumes do — &ldquo;you make a home for the bacteria&rdquo;); <b>transfer nitrogenase to plant organelles</b> so the plant fixes atmospheric nitrogen itself; <b>engineer the cereal crop microbiome</b> so the community around the roots fixes nitrogen for the crop (Pivot Bio). All three aim to cut the need for synthetic nitrogen fertilizer. <i>His principle: given a biological or a synthesized option, the biological one is safer, more useful and lower risk.</i>", "c": "Green Biotech", "p": 0, "img": null}, {"t": "table", "title": "★★★ The three transgenic-crop applications (the 5-mark answers)", "headers": ["Application", "Gene(s) introduced", "What it achieves"], "rows": [["Herbicide resistance", {"a": ["epsps", "resistant epsps"], "mode": "contains"}, {"a": ["survives roundup", "resists roundup", "roundup", "weeds die", "spray"], "mode": "contains"}], ["Insect resistance (Bt)", {"a": ["cry", "cry genes"], "mode": "contains"}, {"a": ["toxin", "kills larvae", "first bite", "insect"], "mode": "contains"}], ["Golden Rice", {"a": ["three", "3", "daffodil"], "mode": "contains"}, {"a": ["beta carotene", "betacarotene", "carotene", "vitamin a", "precursor"], "mode": "contains"}]], "c": "Green Biotech", "p": 1, "note": "One or two words per cell — this is the grid behind his 5-mark question."}, {"t": "qa", "q": "★★★ What is <i>Agrobacterium tumefaciens</i>, and why is it called nature&rsquo;s genetic engineer?", "a": "A <b>Gram-negative, soil-borne</b> bacterium living in soil everywhere, which causes <b>crown gall tumours</b> on plants — literally plant cancerous tumours. It carries a bacterial chromosome (housekeeping genes) plus the <b>Ti plasmid</b>, and it naturally moves part of that plasmid into plant cells — a <b>cross-kingdom DNA transfer</b> that makes it a ready-made delivery system for producing transgenic plants. <i>He is &ldquo;personally obsessed&rdquo; with it — one third of his PhD — and called the three slides &ldquo;3 pages out of 1000 pages,&rdquo; so almost all of this detail is verbal-only.</i>", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "mc", "q": "⚠ His slide prints it as the &ldquo;tumor-producing&rdquo; plasmid. What did he correct Ti to?", "options": ["Tumour-<b>inducing</b> plasmid", "Tumour-<b>invading</b> plasmid", "Transfer-<b>initiating</b> plasmid", "Toxin-inducing plasmid"], "ans": 0, "why": "&ldquo;Here it says tumor producing plasmid, but it&rsquo;s not correct… TI, it means that&rsquo;s tumor inducing plasmid.&rdquo;", "c": "Agrobacterium", "p": 1}, {"t": "qa", "q": "What is the T-DNA, and what happens to it inside the plant?", "a": "<b>T-DNA (transfer DNA)</b> = the section of the Ti plasmid that is <b>nicked out</b> and transferred into the plant cell, where it <b>integrates randomly</b> into the plant&rsquo;s genomic DNA — <i>&ldquo;it can land everywhere.&rdquo;</i>", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "qa", "q": "★★ What does the T-DNA carry into the plant, and what stays behind in the bacterium?", "a": "<b>Transferred INTO the plant:</b> the <b>opine SYNTHESIS genes</b> plus <b>two phytohormone (plant growth hormone) genes</b>, placed under a very strong promoter that also comes from <i>Agrobacterium</i>. <b>Stays behind</b> on the rest of the Ti plasmid: the <b>opine CATABOLISM genes</b> and the <b>vir region</b>. <i>&ldquo;They remain in the agrobacterium because they need it to catabolize opine as a food.&rdquo;</i>", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "mc", "q": "Which genes stay behind in <i>Agrobacterium</i> instead of travelling into the plant?", "options": ["The opine <b>catabolism</b> genes", "The opine <b>synthesis</b> genes", "The two phytohormone genes", "The strong <i>Agrobacterium</i> promoter"], "ans": 0, "why": "Synthesis goes in — so the tumour manufactures opines; catabolism stays behind, because the bacterium is the one that eats them. This is the detail he flagged as easy to get wrong.", "c": "Agrobacterium", "p": 1}, {"t": "qa", "q": "Why does a crown gall tumour form after T-DNA transfer?", "a": "A plant normally makes growth hormones from its <b>own regulated genes</b> — it knows how much to produce to grow from a seed into a tree. The T-DNA hormone genes sit under a <b>strong bacterial promoter and are NOT regulated</b>, so growth runs away. His definition of a tumour: <i>&ldquo;a huge bulk of uncontrolled cell division — cells that grow without any regulation, without any cell death&rdquo;</i> — the same in plants, humans and animals.", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "qa", "q": "What are opines, and why does <i>Agrobacterium</i> go to all this trouble?", "a": "<b>Opines</b> = specialized <b>carbon and nitrogen compounds</b> made by the tumour. The plant <b>cannot use them at all</b>, and they can be catabolized <b>only by <i>A. tumefaciens</i></b> — not by the plant, not by other bacteria. It is a private food supply. Why bother? <i>&ldquo;Because they need food.&rdquo;</i> In soil the bacterium survives poorly and divides slowly; on an opine-producing tumour it grows fast, multiplies, and goes on to infect other plants.", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "mc", "q": "★★ <i>Agrobacterium</i> can only infect a plant naturally if which condition(s) are met?", "options": ["The host is a dicot <b>and</b> there is a wound site", "Any plant, as long as there is a wound site", "Any dicot, wounded or not", "The host is a monocot and the soil is moist"], "ans": 0, "why": "&ldquo;Dicot plants are the natural hosts of the Agrobacterium&rdquo; — and even in a dicot there must be a wound: root, trunk (most common), stem or leaf, caused by humans, animals or nature.", "c": "Agrobacterium", "p": 1}, {"t": "qa", "q": "Why does <i>Agrobacterium</i> need a wound site?", "a": "A wound <b>secretes sugars and phenolic compounds</b>. The bacterium&rsquo;s <b>sensory mechanisms detect them</b>, so it is <b>attracted</b> to the plant, <b>attaches at the wounded site</b>, attacks, and its DNA integrates. <i>✂ The phenolic has a name, but he said the name will not be on the exam.</i>", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "qa", "q": "★ State the left-and-right-border rule, and explain how biotechnologists exploit it.", "a": "The T-DNA is flanked by short <b>left border</b> and <b>right border</b> sequences (he described them as &ldquo;basically 20 base pair&rdquo;; the textbook value is ~25 bp direct repeats). <b>The rule: everything between the left border and the right border is transferred into the host and integrated into its genomic DNA — nothing outside them is transferred.</b> Exploited exactly as he said it: <i>&ldquo;they recognize left border, right border, they remove everything in the middle, and then they put the gene of interest&rdquo;</i> — the opine and phytohormone genes are replaced by your gene plus markers for selection and screening, on a plasmid that can be manipulated in <i>E. coli</i>.", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "qa", "q": "What is cross-kingdom DNA transfer, and why did he say &ldquo;don&rsquo;t limit yourself to the plants&rdquo;?", "a": "<i>A. tumefaciens</i> transfers DNA <b>from a bacterium into a plant</b> — a transfer across biological kingdoms, which he called a very important feature of the organism. Under lab conditions the same system has delivered DNA into <b>yeast, sea urchin, fungi and other bacteria</b>. His real application: put <b>anti-HIV antibody genes</b> between the borders, transform <i>Nicotiana</i> tobacco, and the plants produce the antibody, which is extracted, purified and given to HIV-positive patients — done by a company &ldquo;in London, very close by.&rdquo;", "c": "Agrobacterium", "p": 1, "img": null}, {"t": "fill", "q": "Ti stands for tumour-____ plasmid; the natural hosts of <i>Agrobacterium</i> are ____ plants; and infection also requires a ____ site.", "accept": [["inducing", "induction"], ["dicot", "dicots", "dicotyledon"], ["wound", "wounded", "injury"]], "c": "Agrobacterium", "p": 1}, {"t": "qa", "q": "★ Describe the binary vector system used in <i>Agrobacterium</i>-mediated transformation.", "a": "Two components. <b>Vector 1 — the binary/shuttle plasmid:</b> a modified T-DNA with the <b>left and right borders kept</b>, everything between them removed, and the <b>gene of interest plus suitable markers</b> for selection and screening (e.g. an antibiotic-resistance gene) inserted; it is built and cloned in <i>E. coli</i>, then moved into <i>Agrobacterium</i>. <b>Vector 2 — the helper:</b> the <i>Agrobacterium</i> strain used contains <b>NO T-DNA of its own</b>, but does contain a <b>modified pTi carrying the vir genes</b>, which drive the transfer of whatever lies between the introduced plasmid&rsquo;s borders.", "c": "Plant Transformation", "p": 1, "img": null}, {"t": "qa", "q": "★ Name the three crucial <i>vir</i> genes and say what each one does.", "a": "The vir region can make &gt;100 vir proteins, but <b>3 of them are crucial</b>. <b>VirB</b> — builds the <b>type IV secretion system</b>, which he described as <b>&ldquo;the needle&rdquo;</b>, through which <i>Agrobacterium</i> injects. <b>VirD2 and VirE2</b> — first <b>nick the T-DNA</b> out of the plasmid inside the bacterium, then travel through the T4SS with the T-DNA into the plant cell, where they <b>protect it and guide it</b> through the cytoplasm to the nucleus for random integration. Sequence: attach &rarr; build the needle &rarr; inject the nicked T-DNA &rarr; cytoplasm &rarr; penetrate the nucleus &rarr; random integration &rarr; the gene of interest is expressed.", "c": "Plant Transformation", "p": 1, "img": null}, {"t": "mc", "q": "Which <i>vir</i> gene product builds the type IV secretion system — his &ldquo;needle&rdquo;?", "options": ["VirB", "VirD2", "VirE2", "VirA"], "ans": 0, "why": "VirB builds the needle; VirD2 and VirE2 nick the T-DNA out and escort it to the plant nucleus.", "c": "Plant Transformation", "p": 1}, {"t": "qa", "q": "Walk through the leaf-disc transformation protocol.", "a": "1. Cut <b>discs from plant leaves</b>. 2. Incubate the discs with <i>Agrobacterium</i> carrying the engineered binary plasmid, on <b>antibiotic-containing medium</b>. 3. <b>Calli</b> form from the transformed cells — a <b>callus</b> is <i>&ldquo;a huge bulk of undifferentiated plant cells&rdquo;</i>, millions of transformed cells that just proliferate because in vitro, without the right hormones, they do not know what to differentiate into. 4. Move the calli onto medium with <b>special hormones/inducers</b> &rarr; shoots develop and roots form. 5. Transplant the shoot &rarr; a whole <b>transgenic plant</b>, every cell of which carries and expresses your gene. <i>&ldquo;By a teeny tiny piece of a leaf of a wild-type plant you can manipulate the genomic DNA of the plant.&rdquo;</i>", "c": "Plant Transformation", "p": 1, "img": null}, {"t": "mc", "q": "Which crops resist <i>Agrobacterium</i>-mediated transformation?", "options": ["Wheat, barley and rice — the monocots", "Tobacco, tomato and potato", "All dicots, unless wounded", "Only crops that are already transgenic"], "ans": 0, "why": "Dicots are the natural hosts; the monocots resist, although research has overcome the resistance for some plants — he has personally transformed rice with <i>Agrobacterium</i>.", "c": "Plant Transformation", "p": 1}, {"t": "qa", "q": "What are the alternatives to <i>Agrobacterium</i> for getting DNA into a plant, and why is AMT still the standard?", "a": "<b>Protoplast formation (protoplasting)</b> — removal of the cell wall before introducing the DNA. <b>Biolistics</b> — metal fragments coated with DNA fired into plant cells with a <b>gene gun</b>. His commentary on the gene gun: <i>&ldquo;a very bougie bougie instrument… it&rsquo;s very expensive, efficiency is not that bad, but you cannot say all of the labs have that gene gun — it&rsquo;s limited.&rdquo;</i> So most labs instead use <b>AMT (Agrobacterium-mediated transformation)</b>, which is cheap and easy.", "c": "Plant Transformation", "p": 1, "img": null}, {"t": "fill", "q": "In AMT, ____ builds the type IV secretion needle, while ____ and ____ nick the T-DNA and escort it to the plant nucleus.", "accept": [["virb", "vir b"], ["vird2", "vire2", "vir d2", "vir e2"], ["vire2", "vird2", "vir e2", "vir d2"]], "c": "Plant Transformation", "p": 1}, {"t": "qa", "q": "★★★ How was <i>Bacillus thuringiensis</i> discovered?", "a": "In <b>1901</b>, as the cause of a <b>disease in flour moth caterpillars</b>.", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "mc", "q": "⚠ What actually kills the caterpillar?", "options": ["The toxin the bacterium secretes", "The bacterium itself, by infecting the larva", "The <i>cry</i> plasmid DNA", "Spores germinating in the larval gut"], "ans": 0, "why": "He stressed this distinction explicitly: it is <b>not the bacterium</b> that kills the caterpillars — it is the <b>Bt toxin</b> the bacterium secretes.", "c": "Bt Insect Resistance", "p": 1}, {"t": "qa", "q": "How does Bt toxin kill the larva?", "a": "It acts through the <b>larva&rsquo;s gut</b> — the toxin goes through the guts, interacts, and the larva dies. His slogan, repeated three times: <b>&ldquo;first bite, sudden death.&rdquo;</b>", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "qa", "q": "Which genes encode the Bt toxins, where do they sit, and what do they target?", "a": "The <b><i>cry</i> genes</b>, carried <b>on a plasmid</b> in <i>B. thuringiensis</i>. Targets: the <b>European corn borer (ECB)</b>, <b>beetles and flies</b>, also <b>moths and butterflies</b>.", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "qa", "q": "How do you get a crop to make Bt toxin itself, and is the toxin safe?", "a": "The toxin is a <b>protein</b>, so it has a <b>gene</b> — identify the <i>cry</i> gene and engineer it into the plant, so the plant&rsquo;s <b>own leaves make the toxin</b> and any larva that takes a first bite dies. Bt toxin is <b>highly specific and lethal to certain crop-feeding larvae</b> but is <b>not naturally present in plants</b>; it does nothing to the plant itself and nothing to people eating the plant or its fruit. The problem it solves: larvae hatch and chew the leaves, and <b>&ldquo;a plant without leaves means a dead plant.&rdquo;</b>", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "qa", "q": "Bt was sprayed before it was engineered into plants. Why were transgenic plants the better next step?", "a": "Sprays of Bt were used first and transgenic plants carrying Bt were <b>&ldquo;a logical next step.&rdquo;</b> Spraying is worse because <b>rain washes the spray into groundwater</b>, causing pollution and damaging <b>non-target plants and insects</b>.", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "qa", "q": "Which crop was the Bt demonstration, and what did it show?", "a": "<b>Transgenic tobacco</b> expressing Bt showed <b>far less insect feeding damage</b> on the valuable leaves than a non-transgenic leaf, which was chewed to pieces. That matters because the <b>leaf is the harvested product</b> — a chewed leaf is worthless, since cigars are made by rolling intact layers of leaf.", "c": "Bt Insect Resistance", "p": 1, "img": null}, {"t": "mc", "q": "⚠ What is the main drawback of Bt transgenic crops?", "options": ["Insects can evolve resistance under the new selective pressure", "The toxin harms people who eat the crop", "The toxin damages the plant&rsquo;s own tissues", "The transgenic plants cannot set seed"], "ans": 0, "why": "The toxin is specific and harmless to the plant and to consumers — the real risk is <b>resistance arising in the insects</b> as they evolve under this new selective pressure.", "c": "Bt Insect Resistance", "p": 1}, {"t": "fill", "q": "<i>Bacillus thuringiensis</i> was discovered in ____ as the cause of a disease in ____ moth caterpillars, and its toxins are encoded by the ____ genes carried on a ____.", "accept": [["1901"], ["flour"], ["cry"], ["plasmid"]], "c": "Bt Insect Resistance", "p": 1}, {"t": "qa", "q": "★★★ What is biofortification, and what is the flagship example?", "a": "<b>Biofortification</b> = <b>engineering increased nutrient levels in crop plants</b> — his own definition, given twice: <i>&ldquo;genetically modifying crops to contain more nutrients.&rdquo;</i> The example is <b>Golden Rice</b>, engineered to substantially increase beta-carotene synthesis. <i>He introduced it as &ldquo;one of the most useful example of green biotechnology benefit for human beings&rdquo; and &ldquo;one of the other kind of examples that you need to know.&rdquo;</i>", "c": "Golden Rice", "p": 1, "img": null}, {"t": "mc", "q": "How many genes were engineered into Golden Rice, and where did they come from?", "options": ["Three — two from daffodil and one from a bacterium", "Two — both from daffodil", "Three — all three from bacteria", "One — transferred from carrot"], "ans": 0, "why": "Two daffodil genes plus one bacterial gene, together substantially increasing beta-carotene synthesis.", "c": "Golden Rice", "p": 1}, {"t": "mc", "q": "⚠ His slide prints &ldquo;beta-carotene (Vitamin-A).&rdquo; What correction did he interrupt his own slide to make?", "options": ["Beta-carotene is the <b>precursor</b> the body converts into vitamin A", "Beta-carotene is a breakdown product of vitamin A", "Beta-carotene is simply vitamin A under another name", "Beta-carotene blocks the uptake of vitamin A"], "ans": 0, "why": "&ldquo;Beta-carotene is not vitamin A, beta-carotene is a precursor to produce vitamin A in the body.&rdquo;", "c": "Golden Rice", "p": 1}, {"t": "qa", "q": "What problem does Golden Rice solve, and why put the nutrient into rice specifically?", "a": "<b>Vitamin A deficiency (VAD)</b> — the major nutritional deficiency in low-income countries, causing <b>vision problems, blindness and death</b>. He quoted <b>250,000–500,000 children dying per year</b> (restated later as 300,000), and said <b>childhood blindness was the bigger problem</b>. The economic logic: poor families <b>cannot afford vitamin A or beta-carotene supplements</b>, but <b>rice is cheap and is already the staple</b> — so you engineer the nutrient into the cheap staple.", "c": "Golden Rice", "p": 1, "img": null}, {"t": "qa", "q": "Why is Golden Rice golden, and why did the colour matter to the scientists?", "a": "<b>Beta-carotene is orange</b> — his analogy: carrots are orange because they are full of it. Wild-type rice is white; the engineered grain is <b>yellow/golden</b>, and the colour change was itself the <b>visual confirmation that the modification had worked</b>.", "c": "Golden Rice", "p": 1, "img": null}, {"t": "fill", "q": "Golden Rice carries ____ genes — two from ____ and one from a ____ — and the beta-carotene they make is the ____ of vitamin A.", "accept": [["three", "3"], ["daffodil", "daffodils"], ["bacterium", "bacteria", "bacterial"], ["precursor"]], "c": "Golden Rice", "p": 1}], CATS=["Biorefinery & Fuels", "Bioplastics", "Enzymes & Vitamins", "Green Biotech", "Agrobacterium", "Plant Transformation", "Bt Insect Resistance", "Golden Rice"];
+const STORE="bio2ee3_ch11_anki_v1", MASTER=4, EXAMK="bio2ee3_ch11_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>

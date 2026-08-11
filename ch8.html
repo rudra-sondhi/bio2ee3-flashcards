@@ -1,0 +1,370 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Chapter 8 Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>Chapter 8 — Transcription &amp; Translation</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Focus: the timeline of life · history figures · the three domains · macromolecules · endosymbiosis · origin of life</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "qa", "q": "Central dogma — name the three processes and say what each one produces.", "a": "DNA → DNA = <b>replication</b>; DNA → RNA = <b>transcription</b>; RNA → protein = <b>translation</b>. Transcription is the copying of a segment of DNA into a <b>single-stranded RNA</b> molecule. <i>He said: transcription and translation are the last two steps of the dogma — just remember the dogma.</i>", "c": "RNA Basics", "p": 1, "img": null}, {"t": "qa", "q": "Which classes of RNA are made by transcription?", "a": "<b>mRNA</b>, <b>tRNA</b>, <b>rRNA</b> and <b>regulatory RNA</b> (e.g. small interfering RNA). <i>He said: do not limit yourself to the first three — the regulatory RNAs come back in the gene-expression chapter.</i>", "c": "RNA Basics", "p": 0, "img": null}, {"t": "qa", "q": "Polycistronic vs monocistronic mRNA?", "a": "<b>Polycistronic</b> = one mRNA carrying several genes, so one transcript yields several proteins (bacteria and archaea). <b>Monocistronic</b> = one gene → one mRNA → one protein (eukarya). <i>His rule: polycistronic describes RNA — never call a piece of DNA polycistronic (that is an operon).</i>", "c": "RNA Basics", "p": 1, "img": null}, {"t": "qa", "q": "What does UTR stand for, and what do the UTRs do?", "a": "<b>Untranslated region</b> — the 5′ and 3′ ends of the mRNA. They are transcribed but never translated; they are regulatory sequence carrying the features that <b>initiate and terminate translation</b>. Only the exons are translated.", "c": "RNA Basics", "p": 1, "img": null}, {"t": "qa", "q": "Describe a tRNA: size, shape, and its two business ends.", "a": "75–100 nucleotides folded into a cloverleaf <b>secondary structure</b>. One arm carries the <b>anticodon</b> that pairs with the mRNA codon; the 3′ end carries the <b>amino acid</b> it delivers to the ribosome. <i>He warned: note the 3′→5′ orientation on that figure — he can hand you the structure and ask only for the orientation.</i>", "c": "RNA Basics", "p": 1, "img": null}, {"t": "qa", "q": "Almost all eukaryotic mRNA is monocistronic — so where do the rare polycistronic eukaryotic mRNAs come from?", "a": "From <b>mitochondria and chloroplasts</b>. By endosymbiotic theory these were bacteria; they keep their own DNA and still make polycistronic mRNA. <i>He posed this as his example of a combine-your-knowledge question and told you to write it down.</i>", "c": "RNA Basics", "p": 1, "img": null}, {"t": "qa", "q": "You are given the <b>coding (sense) strand</b>, 5′→3′. How do you write the mRNA?", "a": "Copy it base for base and <b>replace every T with U</b>. Nothing else changes — the mRNA is still written 5′→3′. <i>Uracil instead of thymine: he said that is it.</i> Always label the 5′ and 3′ ends.", "c": "Coding vs Template", "p": 1, "img": null}, {"t": "qa", "q": "You are given the <b>template (antisense) strand</b>, 3′→5′. How do you write the mRNA?", "a": "Write the <b>complement</b> (A↔U, G↔C, T→A) and read it out <b>5′→3′</b>, with U in place of T. RNA polymerase reads the template <b>3′→5′</b> and builds the mRNA <b>5′→3′</b>; the promoter decides where it starts and which strand is the template.", "c": "Coding vs Template", "p": 1, "img": null}, {"t": "qa", "q": "<b>Practice.</b> Coding strand 5′-ATG GCA TTC AGT-3′. Write the mRNA.", "a": "5′-<b>AUG GCA UUC AGU</b>-3′. Coding strand → swap every T for U; the sequence and the direction do not change.", "c": "Coding vs Template", "p": 1, "img": null}, {"t": "qa", "q": "<b>Practice.</b> Template strand 3′-TAC GTT ACG-5′. Write the mRNA.", "a": "5′-<b>AUG CAA UGC</b>-3′. Complement every base (T→A, A→U, C→G, G→C) and read the product out 5′→3′.", "c": "Coding vs Template", "p": 1, "img": null}, {"t": "qa", "q": "What makes an mRNA <b>premature</b>?", "a": "Four things at once: <b>introns still present</b> (alongside the exons), <b>no 5′ cap</b>, <b>no poly(A) tail</b>, and it is <b>still confined to the nucleus</b>. <i>He said naming both the modifications and the location change earns the full credit.</i>", "c": "mRNA Processing", "p": 1, "img": null}, {"t": "qa", "q": "Give the <b>two</b> roles of the poly(A) tail.", "a": "(1) <b>Protection</b> — it shields the mRNA from exonuclease/endonuclease degradation. (2) <b>Export</b> — it carries the mature mRNA out of the nucleus into the cytoplasm. <i>He said: put a star, write down important — these two roles are crucial and you cannot find them in any slide.</i> Exactly two; the others are excluded.", "c": "mRNA Processing", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Why can premature mRNA not leave the nucleus?", "a": "Because it has not been modified: <b>no poly(A) tail</b>, so nothing mediates export, and <b>no 5′ cap</b>, which the ribosome-recruiting proteins require. It still carries introns as well, so it could not be translated even if it got out.", "c": "mRNA Processing", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Define <b>splicing</b>, and distinguish introns from exons. (1 mark)", "a": "<b>Splicing = removal of the introns from premature mRNA</b>, with the exons joined together. <b>Introns</b> are non-coding, carry no protein information and must be removed; <b>exons</b> are the coding regions and must remain. <i>He modelled this exact one-liner: one mark, super easy.</i>", "c": "mRNA Processing", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "What is a promoter, and where is it?", "a": "A regulatory sequence <b>in the DNA</b> that directs RNA polymerase to initiate transcription at a specific position. It sits <b>upstream of the gene</b> to be transcribed and, in his framing, is <b>not part of the gene</b>. He calls it the landing light that tells the polymerase where to come down.", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "What do the bacterial promoter elements <b>−10</b> and <b>−35</b> refer to?", "a": "Positions <b>upstream</b> of the start — they are negative because they are counted <b>backwards from the A of the ATG start codon</b>. These are the elements bound by the sigma factor. <i>He flagged −10/−35 as very important; the sigma-factor name RpoD he said you do NOT need to memorise.</i>", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "What does a sigma factor do, and why are there several of them?", "a": "Bacteria have only <b>one RNA polymerase</b>; the <b>sigma factor</b> is the protein that directs the <b>core</b> polymerase to the promoter. <b>Alternative sigma factors</b> send it to different sets of co-regulated genes needed under particular conditions — <b>heat shock, starvation, nutrient depletion</b>.", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "Core enzyme vs holoenzyme in bacterial transcription (his verbal-only point).", "a": "<b>Core enzyme + sigma factor = holoenzyme</b>, and it is the holoenzyme that binds the promoter. In general an <b>apoenzyme</b> functions alone, while a <b>holoenzyme</b> needs something extra — a cofactor/coenzyme such as Mg, Zn or Fe. <i>He said: this is not on the slide, but I will explain it and you need to know it.</i>", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "Walk through eukaryal transcription initiation.", "a": "1. <b>TBP</b> binds the <b>TATA box</b>. 2. Additional transcription factors including <b>TFIIB</b> bind the promoter region. 3. One of the <b>three</b> RNA polymerases is recruited — <b>RNA polymerase never binds the DNA directly</b>. 4. Localised unwinding of the DNA, and transcription begins. Other eukaryal promoter boxes: <b>octamer, CAAT, GC</b> — <i>know the names, not the sequences</i>.", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "What do <b>TBP</b>, <b>TFIIB</b> and <b>TFB</b> stand for?", "a": "<b>TBP</b> = TATA-binding protein. <b>TFIIB</b> = transcription factor II B (eukarya). <b>TFB</b> = transcription factor B (archaea, and it resembles TFIIB). Archaea run a <b>single</b> RNA polymerase like bacteria but a eukaryal-style apparatus (TBP + TFB). <i>Asked directly whether the full names must be memorised, he said yes.</i>", "c": "Transcription", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "How is transcription terminated in bacteria?", "a": "Two ways. <b>Rho-dependent</b>: the rho protein makes RNA polymerase pop off the DNA at specific sequences. <b>Rho-independent</b>: a <b>hairpin</b> forms from complementary RNA stretches <b>rich in guanine and cytosine</b>, followed by a segment <b>rich in uracil</b>. Eukarya use different mechanisms for their different RNA polymerases.", "c": "Transcription", "p": 1, "img": null}, {"t": "qa", "q": "Codon vs anticodon — what is each, and where does it sit?", "a": "A <b>codon</b> is three consecutive nucleotides <b>on the mRNA</b> specifying one amino acid. The <b>anticodon</b> is the matching triplet <b>on the tRNA</b>, which carries that specific amino acid. The code is <b>degenerate</b>: <b>64 codons for 20 amino acids</b>, so most amino acids have several codons.", "c": "Genetic Code", "p": 1, "img": null}, {"t": "qa", "q": "<b>True or false:</b> several codons code for each amino acid, and the <b>second</b> nucleotide of the codon is often variable.", "a": "<b>FALSE.</b> It is the <b>third</b> nucleotide that is variable — the <b>wobble</b> position. The rest of the statement is true: the code is degenerate. <i>He said these are the facts he turns straight into true/false questions.</i>", "c": "Genetic Code", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "What is the <b>DNA</b> sequence for the start codon?", "a": "<b>ATG</b> — not AUG. <b>There is no uracil in DNA.</b> <i>He confirmed he twisted this on purpose and expects the answer in a fraction of a second.</i>", "c": "Genetic Code", "p": 1, "img": null}, {"t": "qa", "q": "Which amino acid does AUG specify, and what actually initiates translation?", "a": "<b>Methionine</b>. In <b>bacteria</b> a specialised <b>N-formyl methionine (fMet)</b> initiates translation at the <b>first AUG</b>; in <b>eukarya</b> a <b>unique initiator tRNA</b> does it, starting at the first start codon. (He mentioned in passing that GUG can also start a protein — extra information only.)", "c": "Genetic Code", "p": 1, "img": null}, {"t": "qa", "q": "Name the stop codons and say what they do.", "a": "<b>UAA, UAG, UGA.</b> No tRNA reads them — they are recognised by <b>release factors</b> (in both bacteria and eukarya), which make the whole complex fall apart and end translation.", "c": "Genetic Code", "p": 1, "img": null}, {"t": "qa", "q": "Compare where transcription and translation happen in bacteria vs eukarya.", "a": "<b>Bacteria</b>: both in the cytoplasm and <b>coupled</b> — there is no nuclear membrane, and no introns or post-transcriptional processing in the way, so ribosomes translate the mRNA while it is still being transcribed. <b>Eukarya</b>: transcription in the <b>nucleus</b>, the mature mRNA travels out, translation in the <b>cytoplasm</b> — the two are independent.", "c": "Translation", "p": 1, "img": null}, {"t": "qa", "q": "What does <b>charged tRNA</b> mean? (one sentence, full mark)", "a": "A tRNA that has had its <b>specific amino acid attached</b> — coupled to its 3′ end by aminoacyl-tRNA synthetase. A free tRNA floating in the cytoplasm without its amino acid is <b>not</b> charged.", "c": "Translation", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Which enzyme is responsible for <b>charging</b> tRNA?", "a": "<b>Aminoacyl-tRNA synthetase</b> — a family of highly specific enzymes, one matching each amino acid to its own tRNA. <i>He said: highlight this, because I will give you different enzymes with very similar names — when you memorise it, memorise it correctly.</i>", "c": "Translation", "p": 1, "img": null}, {"t": "qa", "q": "What is the Shine–Dalgarno sequence, and what does it do?", "a": "The <b>ribosome-binding site</b> on <b>bacterial</b> mRNA. It <b>base-pairs with a complementary site in the 16S rRNA</b> of the <b>30S</b> small subunit, positioning the ribosome at the correct <b>AUG</b>. A polycistronic mRNA carries <b>one Shine–Dalgarno per gene</b> — that is how one transcript makes several proteins.", "c": "Translation", "p": 1, "img": null}, {"t": "qa", "q": "The translation-initiation figure is a confirmed fill-in-the-blanks question. What are the labels?", "a": "<b>mRNA</b> · the <b>5′→3′ orientation</b> · <b>5′ cap</b> (5′ end) · <b>poly(A) tail</b> (3′ end) · <b>Shine–Dalgarno sequence</b> · <b>30S ribosomal subunit</b> · <b>16S rRNA</b> · <b>region of base-pairing</b> · start codon <b>AUG</b>. <i>He said: there will be images you fill blanks in, and this one is a very good candidate.</i>", "c": "Translation", "p": 1, "img": null, "quiz": true}, {"t": "qa", "q": "Which chemical bonds are involved in protein folding?", "a": "Four, acting intramolecularly: <b>non-covalent interactions</b>, <b>hydrogen bonds</b>, <b>disulfide bridges</b> and <b>ionic bonds</b>. <i>He said: these are something you need to know</i> — the four names only; the chemistry and structures of the bonds are excluded.", "c": "Post-Translation", "p": 1, "img": null}, {"t": "qa", "q": "What is a chaperone?", "a": "A protein that helps <b>other proteins fold and refold</b> correctly. Proteins fold as they leave the ribosome, sometimes with chaperone help, and chaperones are present in <b>all domains of life</b>.", "c": "Post-Translation", "p": 1, "img": null}, {"t": "qa", "q": "Name the post-translational modifications and the group each one adds.", "a": "<b>Phosphorylation</b> → phosphate group. <b>Acetylation</b> → acetyl group. <b>Methylation</b> → methyl group. <b>Glycosylation</b> → carbohydrate group (he will not ask which carbohydrate). Modification affects <b>folding</b> and serves to <b>activate or inhibit</b> the protein; eukaryal proteins are the ones most often modified.", "c": "Post-Translation", "p": 1, "img": null}, {"t": "qa", "q": "What is a signal peptide?", "a": "A <b>short amino-acid sequence at the N-terminus</b> that directs the protein to its appropriate cellular location.", "c": "Post-Translation", "p": 1, "img": null}, {"t": "mc", "q": "Where do we find the promoters?", "options": ["In the DNA", "In the mRNA", "In the rRNA", "None of the above"], "ans": 0, "why": "Promoters are DNA sequences — he dictated this MCQ almost word for word, options and all.", "c": "Transcription", "p": 1, "quiz": true}, {"t": "mc", "q": "Where is a promoter located relative to the gene?", "options": ["Upstream of the gene that needs to be transcribed", "In the middle of the gene", "At the end of the gene", "Both at the start and at the end of the gene"], "ans": 0, "why": "Upstream — and in his framing the promoter is not part of the gene itself.", "c": "Transcription", "p": 1, "quiz": true}, {"t": "mc", "q": "Which domain of life uses three different RNA polymerases?", "options": ["Eukarya", "Bacteria", "Archaea", "All three domains"], "ans": 0, "why": "Bacteria 1 (directed by sigma factors), Archaea 1 (but eukaryal in character, TBP + TFB), Eukarya 3.", "c": "Transcription", "p": 1}, {"t": "mc", "q": "Which enzyme is responsible for charging tRNA?", "options": ["Aminoacyl-tRNA synthetase", "Aminoacyl-tRNA transferase", "Aminoacyl-tRNA polymerase", "tRNA aminotransferase"], "ans": 0, "why": "He promised near-identical distractor names — it is aminoacyl-tRNA <b>synthetase</b>.", "c": "Translation", "p": 1, "quiz": true}, {"t": "mc", "q": "A translation figure shows the mRNA binding the small subunit through a Shine–Dalgarno sequence. This translation belongs to which cell type?", "options": ["Bacteria", "Eukaryotic cells", "Archaea", "None of the above"], "ans": 0, "why": "The Shine–Dalgarno sequence is only found in bacteria — that single feature is the diagnostic.", "c": "Translation", "p": 1, "quiz": true}, {"t": "mc", "q": "On the translation-initiation figure, a blank labels the arrow running along the mRNA from its 5′ end to its 3′ end. What do you write?", "options": ["The orientation: 5′→3′", "mRNA", "The 5′ cap", "The Shine–Dalgarno sequence"], "ans": 0, "why": "His warning: students write mRNA or 5′ cap here — just write down the orientation, that is it.", "c": "Translation", "p": 1, "quiz": true}, {"t": "mc", "q": "In eukarya, what does the initiation complex recognise on the mRNA before the ribosome binds?", "options": ["The 5′ cap", "The Shine–Dalgarno sequence", "The poly(A) tail", "The TATA box"], "ans": 0, "why": "Eukaryal mRNA is bound by several polypeptides, one of which binds the 5′ cap; there is no Shine–Dalgarno outside bacteria.", "c": "Translation", "p": 0}, {"t": "mc", "q": "During elongation, which ribosome sites do the tRNAs use?", "options": ["Charged tRNA enters the A site; uncharged tRNA exits the E site", "Charged tRNA enters the E site; uncharged tRNA exits the A site", "Charged tRNA enters the P site; uncharged tRNA exits the A site", "Charged tRNA enters the A site; uncharged tRNA exits the P site"], "ans": 0, "why": "The ribosome moves codon by codon: charged tRNA in at A, peptide bond formed, uncharged tRNA out at E.", "c": "Translation", "p": 0}, {"t": "mc", "q": "Which nucleotide of a codon is the variable wobble position?", "options": ["The third", "The first", "The second", "None — all three are fixed"], "ans": 0, "why": "Third = wobble. The second-nucleotide version of this statement is the false one he sets.", "c": "Genetic Code", "p": 1}, {"t": "mc", "q": "What is the DNA sequence for the start codon?", "options": ["ATG", "AUG", "TAA", "UAC"], "ans": 0, "why": "DNA contains no uracil — AUG is the mRNA version. Deliberately twisted.", "c": "Genetic Code", "p": 1, "quiz": true}, {"t": "mc", "q": "Which of the following is <b>not</b> a stop codon?", "options": ["UGG", "UAA", "UAG", "UGA"], "ans": 0, "why": "UAA, UAG and UGA are the three stop codons; UGG codes for an amino acid.", "c": "Genetic Code", "p": 1}, {"t": "mc", "q": "The coding strand reads 5′-GATACC-3′. Which is the mRNA?", "options": ["5′-GAUACC-3′", "5′-CUAUGG-3′", "5′-GGUAUC-3′", "5′-GATACC-3′"], "ans": 0, "why": "Coding strand → copy it and swap T for U. Complementing it (CUAUGG) is the classic error; GATACC forgets the U.", "c": "Coding vs Template", "p": 1}, {"t": "mc", "q": "Which of the following is <b>not</b> true of a mature eukaryotic mRNA?", "options": ["It still contains its introns", "It carries a 7-methylguanosine 5′ cap", "It carries a poly(A) tail", "It has been exported to the cytoplasm"], "ans": 0, "why": "Introns are spliced out to make an mRNA mature; the other three are its defining features.", "c": "mRNA Processing", "p": 1}, {"t": "mc", "q": "What are the two roles of the poly(A) tail?", "options": ["Protection from degradation and export from the nucleus", "Splicing and capping", "Ribosome binding and start-codon recognition", "Protection from degradation and intron removal"], "ans": 0, "why": "Exactly two — protection and export. He starred this and said it appears on no slide.", "c": "mRNA Processing", "p": 1}, {"t": "mc", "q": "Which chemical bonds act intramolecularly to make a protein fold?", "options": ["Non-covalent interactions, hydrogen bonds, disulfide bridges and ionic bonds", "Peptide bonds only", "Phosphodiester and glycosidic bonds", "Hydrogen bonds and peptide bonds only"], "ans": 0, "why": "All four names are required; the chemistry and structures of the bonds are not examinable.", "c": "Post-Translation", "p": 1, "quiz": true}, {"t": "mc", "q": "Complete the sentence: in glycosylation, the group added is a ____ group.", "options": ["Carbohydrate", "Phosphate", "Acetyl", "Methyl"], "ans": 0, "why": "Phosphorylation → phosphate, acetylation → acetyl, methylation → methyl, glycosylation → carbohydrate.", "c": "Post-Translation", "p": 1, "quiz": true}, {"t": "fill", "q": "His worked example: template strand 3′-TACGTT-5′ gives mRNA 5′-____-3′, because the base that replaces thymine is ____.", "accept": [["AUGCAA", "AUG CAA", "5 AUGCAA 3"], ["uracil", "u", "uridine"]], "c": "Coding vs Template", "p": 1, "quiz": true}, {"t": "fill", "q": "A mature eukaryotic mRNA carries a 5′ ____ (7-methylguanosine) and a 3′ ____ tail, and its introns have been removed by ____.", "accept": [["cap"], ["poly a", "polya", "poly adenine"], ["splicing", "splice", "spliceosome"]], "c": "mRNA Processing", "p": 1}, {"t": "fill", "q": "Bacterial translation initiation: the ribosome-binding site on the mRNA is the ____ sequence; it base-pairs with the ____ rRNA of the ____ subunit, positioning the ribosome at the start codon ____.", "accept": [["shine dalgarno", "shine delgarno", "sd", "shine dalgarno sequence"], ["16s", "16s rrna"], ["30s", "small", "30s ribosomal"], ["aug"]], "c": "Translation", "p": 1}, {"t": "fill", "q": "The genetic code has ____ codons for ____ amino acids, which makes it degenerate; the ____ nucleotide of a codon is the wobble position.", "accept": [["64"], ["20"], ["third", "3rd", "3"]], "c": "Genetic Code", "p": 1}, {"t": "fill", "q": "In bacteria, ____ factors direct the core RNA polymerase to the promoter; core enzyme plus that factor is called the ____ enzyme.", "accept": [["sigma"], ["holo", "holoenzyme"]], "c": "Transcription", "p": 1}, {"t": "fill", "q": "In most cases, a protein can fold or refold with the help of ____.", "accept": [["chaperones", "chaperone", "molecular chaperones", "chaperonins"]], "c": "Post-Translation", "p": 1, "quiz": true}, {"t": "fill", "q": "Phosphorylation adds a ____ group; methylation adds a ____ group; glycosylation adds a ____ group.", "accept": [["phosphate"], ["methyl"], ["carbohydrate", "carbohydrates", "sugar", "glycan"]], "c": "Post-Translation", "p": 1}, {"t": "table", "title": "★ Premature vs mature mRNA", "headers": ["Feature", "Premature mRNA", "Mature mRNA"], "rows": [["Introns", {"a": ["present", "yes", "there"], "mode": "contains"}, {"a": ["spliced", "removed", "excised"], "mode": "contains"}], ["5′ cap", {"a": ["absent", "no", "none", "missing"], "mode": "contains"}, {"a": ["present", "yes", "7 methylguanosine"], "mode": "contains"}], ["Poly(A) tail", {"a": ["absent", "no", "none", "missing"], "mode": "contains"}, {"a": ["present", "yes"], "mode": "contains"}], ["Location", {"a": ["nucleus", "nuclear"], "mode": "contains"}, {"a": ["cytoplasm", "cytosol", "exported"], "mode": "contains"}]], "c": "mRNA Processing", "p": 1, "quiz": true, "note": "Modifications AND location — he said naming both earns the full credit."}, {"t": "table", "title": "★ Transcription across the three domains", "headers": ["Feature", "Bacteria", "Eukarya", "Archaea"], "rows": [["Number of RNA polymerases", {"a": ["1", "one"], "mode": "exact"}, {"a": ["3", "three"], "mode": "exact"}, {"a": ["1", "one"], "mode": "exact"}], ["Directs the polymerase to the promoter", {"a": ["sigma"], "mode": "contains"}, {"a": ["tfiib", "tbp", "transcription factor"], "mode": "contains"}, {"a": ["tfb", "tbp", "transcription factor"], "mode": "contains"}], ["Its mRNA is mono- or polycistronic?", {"a": ["poly"], "mode": "contains"}, {"a": ["mono"], "mode": "contains"}, {"a": ["poly"], "mode": "contains"}]], "c": "Transcription", "p": 1, "note": "A number, then the protein that recruits the polymerase, then mono- or polycistronic."}], CATS=["RNA Basics", "Coding vs Template", "mRNA Processing", "Transcription", "Genetic Code", "Translation", "Post-Translation"];
+const STORE="bio2ee3_ch8_anki_v1", MASTER=4, EXAMK="bio2ee3_ch8_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>
