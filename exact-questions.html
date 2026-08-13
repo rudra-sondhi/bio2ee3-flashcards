@@ -1,0 +1,371 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIO 2EE3 — Exact Questions Flashcards</title>
+<style>
+:root{--maroon:#7B1F2B;--steel:#4E6478;--blue:#1F7BB5;--bg:#f4f1ec;--card:#fff;--ink:#1c1c1c;--muted:#6b6b6b;
+ --green:#1E7A34;--amber:#8A6D00;--red:#B00020;--line:#e2ddd5;--again:#B00020;--hard:#C0631A;--good:#1E7A34;--easy:#1F7BB5;}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);padding:22px 14px 70px}
+.wrap{max-width:800px;margin:0 auto}
+header{text-align:center;margin-bottom:12px}
+h1{color:var(--maroon);margin:0 0 2px;font-size:25px}
+.sub{color:var(--steel);font-weight:600;font-size:15px}
+.tiny{color:var(--muted);font-size:12.5px;margin-top:4px;line-height:1.5}
+.filters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+.filters.modes{margin-top:2px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--steel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;transition:all .15s;user-select:none;white-space:nowrap}
+.chip:hover{border-color:var(--steel)}
+.chip.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.chip.star.active{background:var(--amber);border-color:var(--amber)}
+.chip.mode.active{background:var(--steel);border-color:var(--steel);color:#fff}
+.examtoggle{display:flex;justify-content:center;margin:10px auto 4px;max-width:460px;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.examtoggle .seg{flex:1;border:none;background:#fff;color:var(--steel);font-weight:700;font-size:13px;padding:10px 8px;cursor:pointer;transition:all .15s;line-height:1.2}
+.examtoggle .seg.on{background:var(--maroon);color:#fff}
+.examtoggle .seg:not(.on):hover{background:#faf8f4}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 8px;color:var(--muted);font-size:13px;gap:10px}
+.progress{flex:1;height:6px;background:#e6e1d8;border-radius:99px;overflow:hidden;margin:0 6px}
+.progress>i{display:block;height:100%;width:0;background:var(--steel);transition:width .3s}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 26px 42px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.card.clickable{cursor:pointer}
+.card .side-label{position:absolute;top:14px;left:16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .cat{position:absolute;top:11px;right:14px;font-size:10.5px;color:#fff;background:var(--steel);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .typetag{position:absolute;top:11px;right:92px;font-size:10.5px;color:#fff;background:var(--blue);padding:3px 9px;border-radius:99px;font-weight:600}
+.card .star{position:absolute;bottom:12px;right:16px;color:var(--amber);font-size:12.5px;font-weight:700}
+.card .lvl{position:absolute;bottom:12px;left:16px;font-size:12px;font-weight:700;color:var(--muted)}
+.q{font-size:20px;font-weight:700;line-height:1.45}
+.a{font-size:18px;line-height:1.55;color:#15361f}
+.a .hl,.hl{color:var(--green);font-weight:700}
+.card img{max-width:100%;max-height:320px;border-radius:10px;margin:4px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hint{position:absolute;bottom:14px;left:0;right:0;color:#b9b2a6;font-size:11.5px}
+.controls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+button.act{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:600}
+button.act:hover{border-color:var(--steel)}
+button.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+button.act:disabled{opacity:.4;cursor:default}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{border:none;border-radius:10px;padding:11px 6px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;display:flex;flex-direction:column;gap:1px;line-height:1.15}
+.grades button small{font-weight:600;font-size:10.5px;opacity:.9}
+.g-again{background:var(--again)}.g-hard{background:var(--hard)}.g-good{background:var(--good)}.g-easy{background:var(--easy)}
+.grades button:active{transform:translateY(1px)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;line-height:1.7}
+kbd{background:#efeae1;border:1px solid #ddd6ca;border-radius:5px;padding:1px 6px;font-size:11px}
+.done{text-align:center;padding:36px 18px}.done h2{color:var(--green);margin:0 0 8px}
+/* fill-in */
+.fillq{font-size:19px;line-height:2.1;font-weight:600}
+.bi{border:none;border-bottom:2px solid var(--steel);background:#faf8f4;font-size:16px;font-weight:700;min-width:96px;max-width:200px;text-align:center;padding:2px 6px;margin:0 3px;font-family:inherit;color:var(--ink)}
+.bi:focus{outline:none;border-bottom-color:var(--maroon);background:#fff}
+.bi.ok{border-bottom-color:var(--green);color:var(--green);background:#eef7ef}
+.bi.no{border-bottom-color:var(--red);color:var(--red);background:#fbeef0}
+.corr{display:inline-block;color:var(--green);font-weight:700;font-size:14px;margin-left:4px}
+.checkbtn{margin-top:16px}
+/* tables */
+.tbl{border-collapse:collapse;margin:6px auto 2px;font-size:14px;width:100%}
+.tbl th{background:var(--maroon);color:#fff;padding:7px 9px;font-size:12.5px;text-align:left}
+.tbl td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+.tbl td.given{background:#f6f3ee;font-weight:700;color:var(--steel)}
+.tbl .bi{min-width:70px;max-width:150px;width:100%;font-size:13px}
+.tbltitle{font-size:17px;font-weight:700;color:var(--maroon);margin-bottom:2px}
+.tblnote{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+/* label overlay */
+.labelwrap{position:relative;display:inline-block;line-height:0}
+.labelwrap img{max-height:340px;max-width:100%}
+.cover{position:absolute;background:#fff;border:1.5px solid var(--maroon);display:flex;align-items:center;justify-content:flex-start;border-radius:3px;overflow:hidden}
+.cover b{background:var(--maroon);color:#fff;font-size:11px;font-weight:700;min-width:17px;height:100%;display:flex;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+.numbadge{position:absolute;display:flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--maroon);color:#fff;font-size:11px;font-weight:700;box-shadow:0 0 0 2px #fff;transform:translate(-3px,-3px)}
+.keylist{list-style:none;padding:0;margin:10px 0 0;font-size:15px;text-align:left;display:inline-block}
+.keylist li{margin:3px 0;line-height:1.4}
+.keylist .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--maroon);color:#fff;font-size:12px;font-weight:700;margin-right:7px}
+/* multiple choice */
+.mcopts{display:flex;flex-direction:column;gap:7px;width:100%;max-width:540px;margin:0 auto}
+.mcopt{text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:all .1s;line-height:1.35}
+.mcopt:hover:not(:disabled){border-color:var(--steel);background:#faf8f4}
+.mcopt.mccorrect{background:#eef7ef;border-color:var(--green);color:var(--green);font-weight:700}
+.mcopt.mcwrong{background:#fbeef0;border-color:var(--red);color:var(--red);font-weight:700}
+.mcopt:disabled{cursor:default}
+.mcverdict{margin-top:12px;font-size:15px;line-height:1.5}
+#statsView{display:none}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+.panel h2{color:var(--maroon);margin:0 0 4px;font-size:20px}
+.overall{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 20px;font-size:14px}.overall b{font-size:20px}
+.srow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.srow:first-of-type{border-top:none}.srow .name{font-weight:600;color:var(--steel)}
+.track{height:12px;background:#ece7de;border-radius:99px;overflow:hidden}.track>i{display:block;height:100%;width:0}
+.srow .num{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.secTitle{margin:22px 0 6px;font-weight:700}.wrongItem{padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
+.wrongItem:first-of-type{border-top:none}.wrongItem .meta{color:var(--muted);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:99px;padding:2px 8px;margin-left:6px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+</style></head><body><div class="wrap">
+<div style="max-width:900px;margin:0 auto 14px"><a href="final.html" style="text-decoration:none;font-size:13.5px;font-weight:700;color:var(--steel,#4E6478)">&larr; All final decks</a></div>
+<header><h1>📋 Exact Questions — his wording, untouched</h1><div class="sub">BIO 2EE3 · Flashcards</div>
+<div class="tiny">★ = prof-flagged testable · rate <b>Again / Hard / Good / Easy</b> (reschedules like Anki)<br>
+✏️ <b>Fill-in</b> &amp; 📊 <b>Tables</b>: type your answer and press <b>Check</b> · 🏷️ <b>Labels</b>: labels are covered — name them, then Reveal</div>
+<div class="tiny" id="syncStatus" style="margin-top:5px;font-weight:700;color:var(--steel)"></div></header>
+<div class="examtoggle" id="examToggle">
+<button class="seg" data-mode="final" onclick="setExam('final')">📚 Long revision — full deck</button>
+<button class="seg" data-mode="midterm" onclick="setExam('midterm')">⚡ Quick revision — MCQ / no typing</button></div>
+<div class="filters modes" id="modeFilters"></div>
+<div class="filters" id="filters"></div>
+<div class="bar"><span id="counter">–</span><span class="progress"><i id="pbar"></i></span><span id="known">0 mastered</span></div>
+<div id="studyView">
+<div class="card" id="card"><div id="cardbody"></div></div>
+<div class="controls">
+<button class="act" id="prevBtn" onclick="prev(event)">← Prev</button>
+<button class="act primary" id="flipBtn" onclick="flip(event)">Flip / Reveal</button>
+<button class="act" id="nextBtn" onclick="next(event)">Skip →</button></div>
+<div class="grades" id="grades">
+<button class="g-again" onclick="grade('again',event)">Again<small>this pass · <kbd>1</kbd></small></button>
+<button class="g-hard" onclick="grade('hard',event)">Hard<small>this pass · <kbd>2</kbd></small></button>
+<button class="g-good" onclick="grade('good',event)">Good<small>next pass · <kbd>3</kbd></small></button>
+<button class="g-easy" onclick="grade('easy',event)">Easy<small>sinks back · <kbd>4</kbd></small></button></div>
+<div class="controls">
+<button class="act" onclick="shuffle()">🔀 Shuffle</button>
+<button class="act" id="hideBtn" onclick="toggleHideKnown()">Hide mastered: off</button>
+<button class="act" onclick="resetSession()">▶ New pass</button>
+<button class="act" onclick="doSync()">☁ Sync</button>
+<button class="act primary" onclick="showStats()">📊 Stats</button></div></div>
+<div id="statsView"><div class="panel"><h2>Your stats</h2>
+<div class="tiny">Each <b>pass</b> shows every card, weakest first. <b>Again</b> brings a card back a few later — and again — in the same pass; <b>Hard</b> returns it once more this pass; <b>Good</b> and <b>Easy</b> rest until your next pass. Nothing is hidden for hours or days, so you can run the whole deck 2–3× a day. MCQ options are reshuffled every time. Mastered = <b>level 4</b> (use “Hide mastered” to drop cards you’ve locked in).</div>
+<div class="overall" id="overall"></div>
+<div class="secTitle">Progress by subchapter</div><div id="catStats"></div>
+<div class="secTitle">Cards you keep missing (“Again”)</div><div id="wrongList"></div></div>
+<div class="controls"><button class="act primary" onclick="showStudy()">← Back to cards</button>
+<button class="act" onclick="resetStats()">↺ Reset all stats</button></div></div>
+<div class="foot"><kbd>Space</kbd> flip · <kbd>1</kbd>-<kbd>4</kbd> grade · <kbd>Enter</kbd> check · <kbd>→</kbd> skip · <kbd>S</kbd> shuffle · <kbd>T</kbd> stats<br>
+Every question exactly as it appeared: same stems, same options, same order, nothing added</div></div>
+<script>
+/* ==================== CLOUD SYNC CONFIG ====================
+   To sync your stats across laptop + phone, fill these 3 in
+   (see "Chapter 2 Flashcards - SYNC SETUP.md" for the 5-min guide).
+   Leave them blank and the app still works fine (stats save on this device only). */
+const SUPABASE_URL      = "";   /* e.g. https://abcdefgh.supabase.co   */
+const SUPABASE_ANON_KEY = "";   /* your project's public "anon" key    */
+const SYNC_CODE_DEFAULT = "";   /* any id you make up, SAME on every device, e.g. "rudra-bio2ee3" */
+/* =========================================================== */
+const IMG={}, CARDS=[{"t": "mc", "q": "<b>Question 1</b> (1 point)<br>What did the experiment by Avery, MacLeod, and McCarty in 1944 with the R and S strains of Streptococcus pneumoniae demonstrate?", "options": ["The ability of these bacteria to kill mice.", "DNA was the genetic material in cells.", "That some strains of Streptococcus were not pathogenic.", "R strain phenotype could spontaneously revert to S strain phenotype.", "Genetic material from one strain could be transferred to another strain."], "ans": 1, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 2</b> (1 point)<br>The Watson-Crick model of DNA shows that the base adenine pairs with:", "options": ["cytosine while guanine pairs with thymine.", "either thymine or cytosine while guanine pairs with either thymine or cytosine.", "thymine while cytosine pairs with guanine.", "guanine while cytosine pairs with thymine.", "either thymine or guanine, while cytosine pairs with either thymine or guanine."], "ans": 2, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 3</b> (1 point)<br>The main differences between Bacteria and Archaea chromosomal DNA when compared to Eukarya chromosomal DNA, is that the Bacteria or Archaea chromosome usually:", "options": ["is found in a non-condensed form while Eukarya DNA is highly condensed and packaged.", "is circular while Eukarya is linear.", "contains the base uracil while Eukarya has thymine in place of uracil.", "is diploid while Eukarya is haploid.", "consist of several chromosomes while Eukarya has a single chromosome."], "ans": 1, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 4</b> (1 point)<br>What is the first protein to bind to the oriC region of the DNA molecule to start the replication process?", "options": ["gyrase", "DNA polymerase", "DnaA", "DnaI", "the primase"], "ans": 2, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 5</b> (1 point)<br>Which statement below is FALSE regarding replication of the bacterial chromosome?", "options": ["DNA replication is a semi-conservative process, where one strand serves as a template for the synthesis of a complementary strand.", "The leading strand is replicated in the 5&rsquo; to 3&rsquo; direction and the lagging strand in the 3&rsquo; to 5&rsquo; direction.", "The incoming nucleotide triphosphate is covalently attached to the free 3&rsquo; hydroxyl.", "Replication occurs in a bidirectional manner from the origin of replication.", "The primase adds a short RNA primer to serve as a starting point for the DNA polymerase to add new bases."], "ans": 1, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 6</b> (1 point)<br>Which enzyme removes the RNA primer and fills in the gap during DNA replication in bacteria?", "options": ["DNAase", "DNA polymerase III", "DNA polymerase I", "primase", "ligase"], "ans": 2, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 7</b> (1 point)<br>Term for a special sequence at the end of the chromosome in eukaryal cells.", "options": ["a terminator", "an enhancer", "a telomere", "an antiorigin", "a centromere"], "ans": 2, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 8</b> (1 point)<br>Which of these best differentiates DNA and RNA?", "options": ["RNA is single-stranded and DNA is double stranded.", "RNA contains ribose and DNA contains deoxyribose.", "RNA contains the base uracil in place of thymine, which is in DNA.", "Both a and b are true.", "a, b, and c are true."], "ans": 4, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 9</b> (1 point)<br>For the initiation of transcription in bacteria, RNA polymerase binds to what region on the gene?", "options": ["promoter", "operator", "origin of replication", "Shine-Dalgarno sequence", "enhancer region"], "ans": 0, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 10</b> (1 point)<br>What does Rho-independent termination of transcription in bacteria involve?", "options": ["A poly U sequence followed by a poly A sequence.", "The formation of a hairpin loop followed by a poly U sequence.", "The formation of a hairpin loop followed by a poly A sequence.", "The formation of a hairpin loop only.", "A poly A sequence followed by a hairpin loop."], "ans": 1, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 11</b> (1 point)<br>The mRNA of bacterial cells is often polycistronic. What does this term mean?", "options": ["The translated protein may be modified in different ways.", "It can be translated more than once.", "It can be translated from either end.", "It is transcribed from multiple sites on the chromosome.", "It contains the code for multiple peptides."], "ans": 4, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 12</b> (1 point)<br>After the translational process the polypeptide folds into the appropriate conformation for proper functioning. What group of proteins aids in protein folding?", "options": ["cytokines", "proteases", "peptidases", "lipases", "chaperonins"], "ans": 4, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 13</b> (1 point)<br>Which of these is a point mutation that does not result in a change in the amino acid that a codon encodes?", "options": ["silent", "frameshift", "nonsense", "missense", "deletion"], "ans": 0, "c": "Week 7 Quiz (peer's copy)", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 1</b> (1 point)<br>What did the experiment by Avery, MacLeod, and McCarty in 1944 with the R and S strains of Streptococcus pneumoniae demonstrate?", "options": ["Genetic material from one strain could be transferred to another strain.", "DNA was the genetic material in cells.", "That some strains of Streptococcus were not pathogenic.", "R strain phenotype could spontaneously revert to S strain phenotype.", "The ability of these bacteria to kill mice."], "ans": 1, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 2</b> (1 point)<br>The Watson-Crick model of DNA shows that the base adenine pairs with:", "options": ["either thymine or cytosine while guanine pairs with either thymine or cytosine.", "thymine while cytosine pairs with guanine.", "either thymine or guanine, while cytosine pairs with either thymine or guanine.", "guanine while cytosine pairs with thymine.", "cytosine while guanine pairs with thymine."], "ans": 1, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 3</b> (1 point)<br>The main difference between Bacteria and Archaea chromosomal DNA compared to Eukarya chromosomal DNA is that the Bacteria or Archaea chromosome usually:", "options": ["is diploid while Eukarya is haploid.", "is found in a non-condensed form while Eukarya DNA is highly condensed and packaged.", "contains the base uracil while Eukarya has thymine in place of uracil.", "is circular while Eukarya is linear.", "consists of several chromosomes while Eukarya has a single chromosome."], "ans": 3, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 4</b> (1 point)<br>What is the first protein to bind to the oriC region of the DNA molecule to start the replication process?", "options": ["DnaA", "the primase", "gyrase", "DNA polymerase", "DnaI"], "ans": 0, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 5</b> (1 point)<br>Which statement below is FALSE regarding replication of the bacterial chromosome?", "options": ["DNA replication is a semi-conservative process, where one strand serves as a template for the synthesis of a complementary strand.", "The primase adds a short RNA primer to serve as a starting point for the DNA polymerase to add new bases.", "Replication occurs in a bidirectional manner from the origin of replication.", "The leading strand is replicated in the 5&rsquo; to 3&rsquo; direction and the lagging strand in the 3&rsquo; to 5&rsquo; direction.", "The incoming nucleotide triphosphate is covalently attached to the free 3&rsquo; hydroxyl."], "ans": 3, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 6</b> (1 point)<br>Which enzyme removes the RNA primer and fills in the gap during DNA replication in bacteria?", "options": ["DNAase", "ligase", "DNA polymerase I", "primase", "DNA polymerase III"], "ans": 2, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 7</b> (1 point)<br>Which enzyme is responsible for adding the final bases to the end of a chromosome during DNA replication in eukaryal cells?", "options": ["telomerase", "DNA pol&alpha;", "topoisomerase", "DNA pol&delta;", "DNA primase B"], "ans": 0, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 8</b> (1 point)<br>Messenger RNA (mRNA) can best be described as a molecule that contains the code for a:", "options": ["protein, rRNA or tRNA.", "protein.", "polypeptide or regulatory RNA.", "polypeptide, tRNA, or rRNA.", "polypeptide."], "ans": 4, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 9</b> (1 point)<br>What is the sigma factor of the RNA polymerase holoenzyme responsible for?", "options": ["transcription termination", "recognition of the promoter region", "transcription elongation", "ribosome binding", "initiation of transcription"], "ans": 1, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 10</b> (1 point)<br>What does Rho-independent termination of transcription in bacteria involve?", "options": ["A poly A sequence followed by a hairpin loop.", "A poly U sequence followed by a poly A sequence.", "The formation of a hairpin loop followed by a poly U sequence.", "The formation of a hairpin loop only.", "The formation of a hairpin loop followed by a poly A sequence."], "ans": 2, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 11</b> (1 point)<br>What is a codon?", "options": ["Three bases on the mRNA that is read by the ribosome in the 5&rsquo; to 3&rsquo; direction.", "Four bases on the mRNA that is read by the ribosome in the 5&rsquo; to 3&rsquo; direction.", "Three bases on the mRNA that is read by the ribosome in the 3&rsquo; to 5&rsquo; direction.", "Two bases on the mRNA that is read by the ribosome in the 5&rsquo; to 3&rsquo; direction.", "Four bases on the mRNA that is read by the ribosome in the 3&rsquo; to 5&rsquo; direction."], "ans": 0, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 12</b> (1 point)<br>After translation the polypeptide folds into the appropriate conformation for proper functioning. What group of proteins aids in protein folding?", "options": ["peptidases", "proteases", "cytokines", "chaperonins", "lipases"], "ans": 3, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 13</b> (1 point)<br>Which of these is a point mutation that does not result in a change in the amino acid that a codon encodes?", "options": ["silent", "frameshift", "missense", "nonsense", "deletion"], "ans": 0, "c": "Your quiz version", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "The Hershey and Chase experiment conclusively demonstrated that DNA, not protein, was the genetic material. They distinguished DNA from protein since labeled ____ incorporated into DNA while labeled ____ incorporated into proteins.", "options": ["phosphorous; sulfur", "nitrogen; sulfur", "nitrogen; magnesium", "magnesium; nitrogen", "sulfur; nitrogen"], "ans": 0, "c": "Extra questions", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "How do nucleotides connect to adjacent nucleotides in the Watson-Crick model of DNA?", "options": ["Via a covalent bond between the 3&rsquo; hydroxyl of one nucleotide and the nitrogenous base of the other.", "Via a hydrogen bond between the nitrogenous base of one nucleotide and the nitrogenous base of the other.", "Via a hydrogen bond between the nitrogenous base of one nucleotide and the 5&rsquo; phosphate of the other.", "Via a covalent bond between the 3&rsquo; hydroxyl of one nucleotide and the 2&rsquo; deoxy of the other.", "Via a covalent bond between the 3&rsquo; hydroxyl of one nucleotide and the 5&rsquo; phosphate of the other."], "ans": 4, "c": "Extra questions", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "Most bacterial promoters consist of two regions: ____ and ____.", "options": ["enhancer region and operator.", "&minus;35 region and operator.", "&minus;10 region (Pribnow box) and operator.", "&minus;10 region (Pribnow box) and &minus;35 region.", "enhancer region and &minus;35 region."], "ans": 3, "c": "Extra questions", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "Which of these would a signal peptide be used for?", "options": ["To regulate translation.", "To initiate DNA replication.", "To move a protein to the outside of the cell.", "To help a protein fold correctly.", "To help regulate the activity of an enzyme."], "ans": 2, "c": "Extra questions", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 1</b><br>Which statement best explains why an autoclave is useful for sterilization?", "options": ["It lowers the temperature needed to kill all microbes", "It uses pressure to keep fluids from evaporating during high-temperature treatment", "It prevents heat from reaching microbial cells", "It specifically targets only hyperthermophiles", "It removes the need for high temperatures"], "ans": 1, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 2</b><br>What is the main function of a chemostat?", "options": ["To expose microorganisms to UV radiation", "To completely sterilize a microbial culture", "To measure cells using a microscope", "To freeze microorganisms at &minus;196&deg;C", "To keep a microbial culture operating continuously by adding fresh medium and removing some old medium and microbes"], "ans": 4, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 3</b><br>What is a limiting nutrient?", "options": ["A nutrient that prevents cell division", "A nutrient found only in liquid media", "A nutrient that is toxic to microorganisms", "The nutrient available in the lowest amount that limits microbial growth", "A nutrient that microorganisms cannot use"], "ans": 3, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 4</b><br>How can fluorescent in situ hybridization (FISH) be used to study an unculturable bacterium?", "options": ["By using fluorescent probes that bind to complementary DNA sequences", "By converting bacterial DNA into proteins", "By growing the bacterium on selective media", "By preventing DNA from being amplified by PCR", "By degrading the bacterium&rsquo;s DNA with restriction enzymes"], "ans": 0, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 5</b><br>What would you use to measure the optical density of a bacterial culture?", "options": ["a flow cytometer", "a spectrophotometer", "a Petroff-Hauser counting chamber", "a microscope", "the plate count method"], "ans": 1, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 6</b><br>Which of these methods can be used to obtain a viable cell count?", "options": ["counting chamber direct count", "optical density", "plate counts of serial dilutions", "turbidity measurement", "loop dilution"], "ans": 2, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 7</b><br>Which statement correctly describes UV radiation as a method of microbial control?", "options": ["UV radiation increases microbial DNA replication", "UV radiation destroys proteins by freezing them", "UV radiation can damage DNA by forming thymine dimers", "UV radiation is primarily used to increase microbial growth", "UV radiation only affects bacterial cell walls"], "ans": 2, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 8</b><br>What is the term for microbes that grow optimally at a pH below 5.5?", "options": ["halophiles", "psychrophiles", "alkalophiles", "acidophiles", "barophiles"], "ans": 3, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 9</b><br>Term for microbes that grow optimally at very high salt concentrations.", "options": ["thermophiles", "osmolphiles", "barophiles", "halophiles", "psychrophiles"], "ans": 3, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 10</b><br>Term applied to microbes that grow optimally at temperatures below 15&deg;C.", "options": ["barophiles", "halophiles", "mesophiles", "alkalophiles", "psychrophiles"], "ans": 4, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 11</b><br>Term for microbes that grow optimally at a pH above 8.5.", "options": ["alkalophiles", "halophiles", "barophiles", "acidophiles", "psychrophiles"], "ans": 0, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 12</b><br>Which type of microorganism uses inorganic compounds for energy and CO&#8322; as its carbon source?", "options": ["Chemolithoheterotroph", "Chemolithoautotroph", "Auxotroph", "Chemoorganoautotroph", "Prototroph"], "ans": 1, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 13</b><br>The enzyme catalase is used to detoxify which harmful oxygen species?", "options": ["hydrogen peroxide", "singlet oxygen", "superoxide", "ozone", "hydroxyl radical"], "ans": 0, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 14</b><br>Term that applies to a bacterium that has an absolute requirement of oxygen for growth.", "options": ["anaerobe", "facultative aerobe", "facultative anaerobe", "aerotolerant anaerobe", "aerobe"], "ans": 4, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 15</b><br>Term for a bacterium that does not use oxygen for growth, but will grow in the presence of oxygen.", "options": ["aerobe", "facultative aerobe", "facultative anaerobe", "anaerobe", "aerotolerant anaerobe"], "ans": 4, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 16</b><br>What is a characteristic of a prototroph?", "options": ["It cannot synthesize all required precursors", "It can grow only on complex media", "It requires oxygen for growth", "It can synthesize all needed macromolecular precursors from a single carbon source and inorganic molecule", "It requires only organic carbon sources"], "ans": 3, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 17</b><br>Which microorganism requires oxygen for growth?", "options": ["Facultative anaerobe", "Aerotolerant anaerobe", "Obligate anaerobe", "Microaerophile", "Obligate aerobe"], "ans": 4, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 18</b><br>A lithotroph is defined as an organism that uses _____ as a source of _____.", "options": ["inorganic compounds; energy and electrons", "carbon dioxide; energy", "inorganic compounds; carbon", "sunlight; energy", "organic compounds; energy and electrons."], "ans": 0, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 19</b><br>A phototroph is defined as an organism that uses _____ as a source of _____.", "options": ["organic compounds; carbon", "inorganic compounds; energy", "sunlight; energy", "organic compounds; energy", "carbon dioxide; carbon"], "ans": 2, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 20</b><br>Which microorganism grows best when oxygen concentrations are lower than normal atmospheric levels?", "options": ["Obligate aerobe", "Microaerophile", "Obligate anaerobe", "Aerotolerant anaerobe", "Facultative anaerobe"], "ans": 1, "c": "Microbial Growth quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 1</b><br>A chemical reaction that has a negative &Delta;G<sup>0</sup>", "options": ["will require an input of energy.", "will absorb energy.", "is an endergonic reaction.", "is not a spontaneous reaction.", "is an energy yielding reaction."], "ans": 4, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 2</b><br>How is the activity of an allosteric enzyme regulated?", "options": ["Through the binding of a competitive inhibitor.", "By a coenzyme.", "By covalent modification.", "Through the binding of an effector molecule.", "By substrate binding."], "ans": 3, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 3</b><br>How many NET molecules of ATP are produced during the Embden-Meyerhof pathway of glycolysis for every molecule of glucose that is converted into two molecules of pyruvate?", "options": ["one", "two", "four", "six", "ten"], "ans": 1, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 4</b><br>When does feedback inhibition of an enzyme occur?", "options": ["If a competitive inhibitor binds to the active site of the enzyme", "If a noncompetitive inhibitor binds to the active site of the enzyme.", "If an end product of the pathway binds to the allosteric site of the enzyme.", "If an end product of the pathway binds to the active site of the enzyme.", "If the coenzyme fails to bind to the active site of the enzyme."], "ans": 2, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 5</b><br>Enzymes that break down proteins into individual amino acids.", "options": ["dehydrogenases", "reductases", "amylases", "lipases", "proteases"], "ans": 4, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 6</b><br>The biosynthesis of amino acids requires starting intermediates from which of these pathways?", "options": ["the pentose phosphate pathway and glycolysis", "glycolysis, TCA cycle, and the pentose phosphate pathway", "the TCA cycle only", "glycolysis only", "glycolysis and TCA cycle"], "ans": 1, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 7</b><br>How do enzymes increase the rate of a biochemical reaction?", "options": ["By lowering the activation energy.", "By increasing the standard free energy.", "By lowering the standard free energy.", "By increasing the activation energy.", "By lowering the reduction potential."], "ans": 0, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 8</b><br>Which of these is the most widely used form of energy in cell processes?", "options": ["glucose", "NADH", "pyruvate", "ATP", "citrate"], "ans": 3, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 9</b><br>Oxidative phosphorylation uses ALL of the following for energy production EXCEPT:", "options": ["electrons from NADH.", "membrane-associated electron transport chain.", "an ATP synthase.", "phosphoenolpyruvate.", "a proton motive force."], "ans": 3, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 10</b><br>What are the NET products of the Embden-Meyerhof pathway, when operating in the catabolic direction?", "options": ["Two pyruvate, two ATP, and two NADH.", "Two pyruvate, four ATP, and four NADH.", "Two CO2, four pyruvate, two ATP, and four NADH.", "Two CO2, two pyruvate, four ATP, and four NADH.", "Two CO2, two pyruvate, two ATP, and two NADH."], "ans": 0, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 11</b><br>Which of these sets are products of the TCA (Krebs) Cycle?", "options": ["NADH, ATP, CO2, and oxaloacetate", "NADH, FADH2, and ATP", "NADH, FADH2, and oxaloacetate", "NADH, FADH2, CO2, and ATP", "NADH, FADH2, CO2, and oxaloacetate"], "ans": 3, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 12</b><br>Which definition in correct for Catabolism:", "options": ["consuming energy for biosynthesis of macromolecules from smaller molecules.", "the amount of energy that must be invested for a reaction to occur.", "breakdown of larger molecules to smaller molecules yielding energy (often stored in ATP).", "The transfer of electrons from one molecule to another is another way energy can be liberated or captured.", "None of the above."], "ans": 2, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 13</b><br>Which molecule is the final electron acceptor in the mitochondrial electron transport chain (ETC)?", "options": ["NADH", "FADH&#8322;", "Oxygen (O&#8322;)", "ATP", "None of the above"], "ans": 2, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 14</b><br>Which one produce more ATP?", "options": ["Entner-Doudoroff", "Embden-Meyerhof-Parnas", "Pentose phosphate", "EMP", "Embden-Meyerhof-Parnas and EMP"], "ans": 4, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 15</b><br>Which one explains the transition reaction precisely in the TCA cycle?", "options": ["Pyruvate &rarr; Lactate + NAD&#8314;", "Pyruvate &rarr; Acetyl-CoA + CO&#8322; + NADH", "Acetyl-CoA &rarr; Pyruvate + CO&#8322;", "Glucose &rarr; Pyruvate + ATP"], "ans": 1, "c": "Metabolism quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 1</b><br>Expression of genes that are constitutive is:", "options": ["regulated by repression.", "regulated by attenuation.", "regulated by activation.", "unregulated.", "regulated by induction."], "ans": 3, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 2</b><br>What is an effector molecule?", "options": ["An activator protein for gene expression.", "A small molecule that binds to the operator region of a gene.", "A protein that binds to an operator region of a gene.", "A small molecule that binds to an enzyme to regulate its activity.", "A small RNA molecule that inhibits translation of mRNA."], "ans": 3, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 3</b><br>Which of these controls the expression of the lac operon?", "options": ["An attenuation mechanism.", "An activator protein only.", "A repressor protein only.", "Both repression and attenuation mechanisms.", "Both repression and activation mechanisms."], "ans": 4, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 4</b><br>When does repression of the lac operon occur?", "options": ["When the repressor protein binds to the operator region.", "When allolactose binds to &beta;-galactosidase.", "When allolactose binds to the operator region.", "When allolactose binds to the repressor protein.", "When the repressor protein binds to the promoter."], "ans": 0, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 5</b><br>The term for a large group of genes whose expression is under the control of a single regulatory system.", "options": ["biome", "transcriptome", "super operon", "regulon", "operon"], "ans": 3, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 6</b><br>The catabolite activator protein (CAP) activates transcription of the lac operon when it binds this coactivator.", "options": ["cyclic-AMP", "ATP", "glucose", "allolactose", "lactose"], "ans": 0, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 7</b><br>What does sigma factor helps the RNA polymerase do?", "options": ["Assemble tRNA subunits.", "Release from the transcribed DNA.", "Bind to activator proteins.", "Attach the ribosomal subunits.", "Identify the promoter region of a gene."], "ans": 4, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 8</b><br>The expression of genes required for biofilm formation occurs only after a cell has attached to a surface that is suitable for biofilm development. What is this type of gene expression called?", "options": ["attenuation", "feedback inhibition", "induction", "repression", "inhibition"], "ans": 2, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 9</b><br>Which of these is required for transcription that is regulated by positive control?", "options": ["activator protein", "repressor protein", "inducer protein", "attenuator protein", "DNA polymerase."], "ans": 0, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 10</b><br>How will E. coli growing in a medium containing both lactose and glucose react?", "options": ["By preferentially utilizing lactose first.", "By preferentially utilizing glucose first.", "By utilizing both at the same time.", "Neither compound will be utilized for growth.", "One will sometimes be utilized over the other."], "ans": 1, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 11</b><br>A mutation in the lacI gene results in an active repressor protein that can no longer bind allolactose. Which would be true of the phenotype of the mutant strain?", "options": ["It would be constitutive for &beta;-galactosidase expression.", "It would overexpress LacZ.", "It would be the same as the wild-type strain.", "It would repress &beta;-galactosidase when lactose is present.", "It would be overexpress &beta;-galactosidase when lactose is present."], "ans": 3, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 12</b><br>Which one(s) is(are) true scientific fact(s)?", "options": ["SOS response allows a cell to recognize and respond to serious DNA damage.", "Early studies by Jean-Jacques Weigle showed UV exposure induces nonspecific repair mechanisms in bacteria.", "Bacteria pre-exposed to UV light, then infected with damaged phages, repaired the phage DNA but also introduced more mutations.", "Mytomycin C is a DNA damage agent.", "All the above."], "ans": 4, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 13</b><br>When DNA damage occurs, the RecA protein interacts with dsDNA produced by damage to DNA, causing it to mediate cleavage of the LexA repressor.", "options": ["True", "False"], "ans": 1, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 14</b><br>Which of the following is NOT true about sigma factors in bacteria?", "options": ["Most E. coli operators are recognized by sigma-70 (RpoD, but there are 6 alternative sigma-70 family members.", "Sigma-54 (RpoN): Regulating nitrogen utilization genes under nitrogen-limited conditions.", "Sigma-32 (RpoH): Heat-shock protein gene regulator helping cell cope with protein-misfolding during heat stress", "Sigma-38 (RpoS): General stress-response gene regulator that activates genes needed for survival in stationary growth phase or in stress 18."], "ans": 0, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}, {"t": "mc", "q": "<b>Question 15</b><br>Which one is not part of the lac operon?", "options": ["Promoter", "Operrator", "lacI", "lacA"], "ans": 2, "c": "Gene Regulation quiz", "p": 1, "quiz": true, "noshuffle": true}], CATS=["Week 7 Quiz (peer's copy)", "Your quiz version", "Extra questions", "Microbial Growth quiz", "Metabolism quiz", "Gene Regulation quiz"];
+const STORE="bio2ee3_exact_anki_v1", MASTER=4, EXAMK="bio2ee3_exact_exam";
+let examMode="final";try{examMode=localStorage.getItem(EXAMK)||"final"}catch(e){}
+function setExam(m){examMode=m;try{localStorage.setItem(EXAMK,m)}catch(e){}
+ if(m==='midterm'&&(modeFilter==='fill'||modeFilter==='table'))modeFilter='ALL';
+ buildExamToggle();buildModeFilters();buildQueue();render()}
+function buildExamToggle(){document.querySelectorAll('#examToggle .seg').forEach(b=>b.classList.toggle('on',b.dataset.mode===examMode))}
+let catFilter="ALL", modeFilter="ALL", queue=[], pos=0, flipped=false, checked=false;
+let hideKnown=false;
+let stats={}; try{stats=JSON.parse(localStorage.getItem(STORE)||"{}")||{}}catch(e){stats={}}
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}schedulePush();}
+/* ---------- cloud sync (Supabase) ---------- */
+const SYNCK="bio2ee3_ch1_synccode";
+let SYNC_CODE=SYNC_CODE_DEFAULT; try{if(!SYNC_CODE)SYNC_CODE=localStorage.getItem(SYNCK)||""}catch(e){}
+let pushTimer=null;
+function syncOn(){return !!(SUPABASE_URL&&SUPABASE_ANON_KEY&&SYNC_CODE)}
+function setSync(s){const el=$("syncStatus");if(el)el.textContent=s}
+function hdrs(){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"}}
+async function cloudPull(){try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?id=eq."+encodeURIComponent(SYNC_CODE+"-ch1")+"&select=data",{headers:hdrs()});if(!r.ok)return undefined;const j=await r.json();return j.length?(j[0].data||{}):{}}catch(e){return undefined}}
+async function cloudPush(){if(!syncOn())return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/flashcard_stats?on_conflict=id",{method:"POST",headers:Object.assign(hdrs(),{Prefer:"resolution=merge-duplicates,return=minimal"}),body:JSON.stringify({id:SYNC_CODE+'-ch1',data:stats,updated_at:new Date().toISOString()})});setSync(r.ok?("☁ synced · "+new Date().toLocaleTimeString()):"⚠ sync error — check keys / table")}catch(e){setSync("⚠ offline — changes saved locally")}}
+function schedulePush(){if(!syncOn())return;setSync("saving…");clearTimeout(pushTimer);pushTimer=setTimeout(cloudPush,1200)}
+function mergeStats(a,b){const o=Object.assign({},a);for(const k in b){const x=a[k],y=b[k];if(!x){o[k]=y;continue}const ax=x.again+x.hard+x.good+x.easy,ay=y.again+y.hard+y.good+y.easy;o[k]=(ay>ax||(ay===ax&&y.lvl>x.lvl))?y:x}return o}
+async function doSync(){if(!syncOn())return setupSync();setSync("syncing…");const cloud=await cloudPull();if(cloud===undefined)return setSync("⚠ can't reach cloud — check config");stats=mergeStats(stats,cloud);try{localStorage.setItem(STORE,JSON.stringify(stats))}catch(e){}await cloudPush();buildQueue();if($("statsView").style.display==="block")showStats();else render()}
+function setupSync(){if(!SUPABASE_URL||!SUPABASE_ANON_KEY){alert("Cloud sync isn't set up yet.\n\nOpen this HTML file in a text editor, fill SUPABASE_URL and SUPABASE_ANON_KEY at the very top, then re-host. See the SYNC SETUP guide.");return}const c=prompt("Sync code — use the SAME code on every device to share your stats:",SYNC_CODE||"");if(c&&c.trim()){SYNC_CODE=c.trim();try{localStorage.setItem(SYNCK,SYNC_CODE)}catch(e){}doSync()}}
+function initSync(){if(syncOn()){setSync("☁ sync on · "+SYNC_CODE);doSync()}else if(SUPABASE_URL&&SUPABASE_ANON_KEY){setSync("☁ tap “Sync” to set your code")}else{setSync("")}}
+function key(i){return CARDS[i].q?CARDS[i].q+"|"+CARDS[i].c:(CARDS[i].title+"|"+CARDS[i].c)}
+function st(i){let k=key(i);let s=stats[k];if(!s){s=stats[k]={lvl:0,ease:2.3,ivl:0,due:0,again:0,hard:0,good:0,easy:0}}else{if(s.ease==null)s.ease=2.3;if(s.ivl==null)s.ivl=0;if(s.due==null)s.due=0}return s}
+function isMastered(i){return st(i).lvl>=MASTER}
+const TYPELABEL={qa:"Q&A",fill:"✏️ Fill-in",table:"📊 Table",label:"🏷️ Label",mc:"📝 Quiz"};
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,' ').trim()}
+function matchBlank(input,accept,mode){const ni=norm(input);if(!ni)return false;
+ return accept.some(a=>{const na=norm(a);if(mode==='exact')return ni===na||ni.replace(/s$/,'')===na.replace(/s$/,'');return ni.includes(na)})}
+
+function baseIndices(){return CARDS.map((_,i)=>i).filter(i=>{const c=CARDS[i];
+ if(examMode==='midterm'&&(c.t==='fill'||c.t==='table'))return false;
+ if(catFilter==="STAR"&&c.p!==1)return false;
+ if(catFilter==="QUIZ"&&!c.quiz)return false;
+ if(catFilter!=="ALL"&&catFilter!=="STAR"&&catFilter!=="QUIZ"&&c.c!==catFilter)return false;
+ if(modeFilter!=="ALL"&&c.t!==modeFilter)return false;return true})}
+function buildQueue(){let idx=baseIndices();if(hideKnown)idx=idx.filter(i=>!isMastered(i));
+ idx.sort((a,b)=>st(a).lvl-st(b).lvl||Math.random()-0.5);
+ queue=idx;pos=0;flipped=false;checked=false}
+
+function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
+ const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
+ const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
+ const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
+ f.appendChild(mk("All types ("+avail+")","ALL"));
+ if(has('qa'))f.appendChild(mk("Q&A","qa"));
+ if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
+ if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
+ if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
+ if(has('label'))f.appendChild(mk("🏷️ Labelling","label"))}
+function buildFilters(){const f=$("filters");f.innerHTML="";
+ const mk=(l,k,s)=>{const e=document.createElement("span");e.className="chip"+(s?" star":"")+(catFilter===k?" active":"");e.textContent=l;e.onclick=()=>{catFilter=k;buildQueue();buildFilters();render()};return e};
+ f.appendChild(mk("All ("+CARDS.length+")","ALL",false));
+ f.appendChild(mk("★ Priority ("+CARDS.filter(c=>c.p===1).length+")","STAR",true));
+ f.appendChild(mk("📝 Past Quiz ("+CARDS.filter(c=>c.quiz).length+")","QUIZ",false));
+ CATS.forEach(c=>f.appendChild(mk(c+" ("+CARDS.filter(x=>x.c===c).length+")",c,false)))}
+
+function esc(s){return s}
+function render(){
+ const card=$("card"), body=id=>document.getElementById(id);
+ if(queue.length===0){card.className="card";
+  card.innerHTML='<div class="done"><h2>✓ Pass complete!</h2><p>You went through every card in this view'+(hideKnown?" (mastered hidden)":"")+'. Go again — cards you rated <b>Again/Hard</b> lead the next pass.</p><div class="controls" style="justify-content:center;margin-top:14px"><button class="act primary" onclick="resetSession()">▶ Next pass</button><button class="act" onclick="showStats()">📊 Stats</button></div></div>';
+  $("counter").textContent="0 left";$("pbar").style.width="100%";setGrades(false);updateMastered();return}
+ setGrades(true);
+ if(pos>=queue.length)pos=0;
+ const i=queue[pos], c=CARDS[i], s=st(i);
+ const isTyped=(c.t==='fill'||c.t==='table');
+ card.className="card"+((c.t==='qa'||c.t==='label')?" clickable":"");
+ let h='<span class="side-label">'+(flipped?"Answer":(c.t==='fill'?"Fill in the blanks":c.t==='table'?"Fill the table":c.t==='label'?"Name the parts":c.t==='mc'?"Multiple choice":"Question"))+'</span>';
+ h+='<span class="typetag">'+TYPELABEL[c.t]+'</span><span class="cat">'+c.c+'</span>';
+ h+=c.p===1?'<span class="star">★ priority</span>':'';
+ h+='<span class="lvl">level <b>'+s.lvl+'</b>/'+MASTER+(s.again?' · <span style="color:var(--red)">✗'+s.again+'</span>':'')+'</span>';
+ h+='<div style="width:100%">'+renderBody(c,i)+'</div>';
+ h+='<span class="hint">'+hintFor(c)+'</span>';
+ card.innerHTML=h;
+ card.onclick=(c.t==='qa'||c.t==='label')?cardClick:null;
+ $("counter").textContent=(pos+1)+" of "+queue.length+" left";
+ $("pbar").style.width=((pos)/Math.max(1,queue.length)*100)+"%";
+ $("prevBtn").disabled=pos===0;
+ $("flipBtn").textContent=isTyped?"Reveal answers":(flipped?"Flip back":"Flip / Reveal");
+ updateMastered();
+}
+function hintFor(c){if(!flipped){if(c.t==='label')return"labels are covered — name them, then Reveal";if(c.t==='fill'||c.t==='table')return"type your answers, then Check (or Enter)";if(c.t==='mc')return"pick an answer";return"click to reveal"}return"How well did you know it? Again / Hard / Good / Easy"}
+
+function renderBody(c,i){
+ if(c.t==='qa'){if(!flipped)return '<div class="q">'+c.q+'</div>';
+   return '<div class="a">'+c.a+'</div>'+(c.img?'<div><img src="'+IMG[c.img]+'"></div>':'')}
+ if(c.t==='fill') return renderFill(c);
+ if(c.t==='table') return renderTable(c);
+ if(c.t==='label') return renderLabel(c);
+ if(c.t==='mc') return renderMC(c);
+}
+function shuffleOpts(opts){const pin=[],free=[];
+ opts.forEach((o,i)=>{(/^(all|none|both|neither)\b/i.test(String(o).replace(/<[^>]+>/g,'').trim())?pin:free).push(i)});
+ for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
+ return free.concat(pin)}
+function renderMC(c){
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=c.noshuffle?c.options.map((_,i)=>i):shuffleOpts(c.options);
+ let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
+ mcOrder.forEach(oi=>{let cls='mcopt';
+  if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
+  h+='<button class="'+cls+'" '+(checked?'disabled':'')+' onclick="chooseMC('+oi+',event)">'+c.options[oi]+'</button>';});
+ h+='</div>';
+ if(checked){const ok=curChoice===c.ans;
+  h+='<div class="mcverdict"><b style="color:'+(ok?'var(--green)':'var(--red)')+'">'+(curChoice==null?'Answer:':(ok?'✓ Correct!':'✗ Not quite —'))+'</b> <b>'+c.options[c.ans]+'</b>'+(c.why?'<br><span class="tiny">'+c.why+'</span>':'')+'</div>';}
+ return h}
+function chooseMC(i,e){if(e)e.stopPropagation();curChoice=i;checked=true;flipped=true;render()}
+/* FILL */
+function renderFill(c){
+ const parts=c.q.split(/_{3,}/);
+ let h='<div class="fillq">';
+ for(let b=0;b<parts.length;b++){h+=parts[b];
+  if(b<parts.length-1){let val=(curVals[b]!=null?curVals[b]:''),cls='bi',dis='';
+   if(revealed){val=c.accept[b][0];cls+=' ok';dis='disabled'}
+   else if(checked){cls+=matchBlank(val,c.accept[b],'exact')?' ok':' no';dis='disabled'}
+   h+='<input class="'+cls+'" id="bi'+b+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+   if(checked&&!matchBlank(val,c.accept[b],'exact'))h+='<span class="corr">'+c.accept[b][0]+'</span>';
+  }}
+ h+='</div>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkFill(event)">✓ Check answer</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:12px">'+scoreLine(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:12px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function scoreLine(c){let n=c.accept.length,ok=0;for(let b=0;b<n;b++)if(matchBlank(curVals[b]||'',c.accept[b],'exact'))ok++;
+ return '<b style="color:'+(ok===n?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+n+' correct</b> — now rate yourself below.'}
+function checkFill(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];
+ curVals=[];const n=c.accept.length;for(let b=0;b<n;b++){const el=$("bi"+b);curVals[b]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* TABLE */
+function renderTable(c){
+ let h='<div class="tbltitle">'+c.title+'</div>'+(c.note?'<div class="tblnote">'+c.note+'</div>':'');
+ h+='<table class="tbl"><tr>';c.headers.forEach(x=>h+='<th>'+x+'</th>');h+='</tr>';
+ let bi=0;
+ c.rows.forEach((row,r)=>{h+='<tr>';row.forEach((cell,cc)=>{
+   if(typeof cell==='string'){h+='<td class="given">'+cell+'</td>'}
+   else{let val=(curVals[bi]!=null?curVals[bi]:''),cls='bi',dis='';
+    if(revealed){val=cell.a[0];cls+=' ok';dis='disabled'}
+    else if(checked){cls+=matchBlank(val,cell.a,cell.mode||'contains')?' ok':' no';dis='disabled'}
+    h+='<td><input class="'+cls+'" id="bi'+bi+'" value="'+attr(val)+'" '+dis+' autocomplete="off">';
+    if(checked&&!matchBlank(val,cell.a,cell.mode||'contains'))h+='<div class="corr">'+cell.a[0]+'</div>';
+    h+='</td>';bi++}
+  });h+='</tr>'});
+ h+='</table>';
+ if(!checked&&!revealed)h+='<div class="controls checkbtn"><button class="act primary" onclick="checkTable(event)">✓ Check table</button></div>';
+ else if(checked)h+='<div class="tiny" style="margin-top:10px">'+tableScore(c)+'</div>';
+ else h+='<div class="tiny" style="margin-top:10px">Answers revealed (green) — rate yourself below.</div>';
+ return h}
+function tableBlanks(c){let out=[];c.rows.forEach(row=>row.forEach(cell=>{if(typeof cell!=='string')out.push(cell)}));return out}
+function tableScore(c){const bs=tableBlanks(c);let ok=0;bs.forEach((cell,k)=>{if(matchBlank(curVals[k]||'',cell.a,cell.mode||'contains'))ok++});
+ return '<b style="color:'+(ok===bs.length?'var(--green)':ok?'var(--amber)':'var(--red)')+'">'+ok+' / '+bs.length+' correct</b> — rate yourself below.'}
+function checkTable(e){if(e)e.stopPropagation();const c=CARDS[queue[pos]];const bs=tableBlanks(c);
+ curVals=[];for(let k=0;k<bs.length;k++){const el=$("bi"+k);curVals[k]=el?el.value:''}
+ checked=true;flipped=true;render()}
+/* LABEL */
+function renderLabel(c){
+ let h='<div class="q" style="margin-bottom:10px">'+c.q+'</div>';
+ h+='<div class="labelwrap"><img src="'+IMG[c.img]+'">';
+ c.boxes.forEach(box=>{const[n,x,y,w,ht]=box;
+   if(!flipped){h+='<div class="cover" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+ht+'%">'+(n>0?'<b>'+n+'</b>':'')+'</div>'}
+   else if(n>0){h+='<div class="numbadge" style="left:'+x+'%;top:'+y+'%">'+n+'</div>'}});
+ h+='</div>';
+ if(flipped){h+='<ul class="keylist">';c.key.forEach(k=>h+='<li><span class="n">'+k[0]+'</span>'+k[1]+'</li>');h+='</ul>'}
+ return h}
+
+function attr(s){return (s||'').replace(/"/g,'&quot;')}
+function setGrades(on){document.querySelectorAll('#grades button').forEach(b=>b.disabled=!on)}
+function updateMastered(){const inv=baseIndices();$("known").textContent=inv.filter(isMastered).length+" / "+inv.length+" mastered"}
+function cardClick(e){const c=CARDS[queue[pos]];if(c.t==='fill'||c.t==='table'||c.t==='mc')return;if(e&&(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'))return;flip()}
+function flip(e){if(e)e.stopPropagation();if(!queue.length)return;const c=CARDS[queue[pos]];
+ if(c.t==='mc'){if(checked){checked=false;curChoice=null;flipped=false}else{checked=true;flipped=true}render();return}
+ if(c.t==='fill'||c.t==='table'){if(checked||revealed){checked=false;revealed=false;flipped=false;curVals=[]}else{revealed=true;flipped=true}render();return}
+ flipped=!flipped;render()}
+let curVals=[],revealed=false,curChoice=null,mcOrder=null;
+function resetView(){flipped=false;checked=false;revealed=false;curVals=[];curChoice=null;mcOrder=null}
+function next(e){if(e)e.stopPropagation();if(pos<queue.length-1){pos++;resetView();render()}}
+function prev(e){if(e)e.stopPropagation();if(pos>0){pos--;resetView();render()}}
+function grade(g,e){if(e)e.stopPropagation();if(!queue.length)return;const i=queue[pos],s=st(i);s[g]++;
+ const ease=s.ease||2.3;
+ if(g==='again'){s.lvl=0;s.ease=Math.max(1.3,ease-0.2)}
+ else if(g==='hard'){s.ease=Math.max(1.3,ease-0.15)}
+ else if(g==='good'){s.lvl=Math.min(5,s.lvl+1)}
+ else if(g==='easy'){s.lvl=Math.max(MASTER,s.lvl+2);s.ease=ease+0.15}
+ save();queue.splice(pos,1);
+ // within-pass resurfacing: Again comes back a few cards later (and repeats); Hard once more this pass.
+ // Good / Easy rest until your NEXT pass (nothing is hidden for hours or days).
+ if(g==='again'){queue.splice(Math.min(queue.length,pos+3),0,i)}
+ else if(g==='hard'){queue.splice(Math.min(queue.length,pos+12),0,i)}
+ if(pos>=queue.length)pos=0;resetView();render()}
+function shuffle(){for(let k=queue.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[queue[k],queue[j]]=[queue[j],queue[k]]}pos=0;resetView();render()}
+function toggleHideKnown(){hideKnown=!hideKnown;$("hideBtn").textContent="Hide mastered: "+(hideKnown?"on":"off");buildQueue();render()}
+function resetSession(){buildQueue();render()}
+
+function barColor(a,att){if(att===0)return"#cfc8bc";if(a>=80)return"var(--green)";if(a>=50)return"var(--amber)";return"var(--red)"}
+function attempts(s){return s.again+s.hard+s.good+s.easy}
+function showStats(){let tA=0,tC=0;CARDS.forEach((_,i)=>{const s=st(i);tA+=attempts(s);tC+=s.good+s.easy});
+ const acc=tA?Math.round(tC/tA*100):0,mast=CARDS.map((_,i)=>i).filter(isMastered).length;
+ $("overall").innerHTML='<div><b>'+tA+'</b><br>ratings logged</div><div><b style="color:'+(acc>=80?'var(--green)':acc>=50?'var(--amber)':'var(--red)')+'">'+acc+'%</b><br>Good/Easy rate</div><div><b>'+mast+' / '+CARDS.length+'</b><br>mastered</div>';
+ let html="";CATS.forEach(c=>{const idx=CARDS.map((_,i)=>i).filter(i=>CARDS[i].c===c);let a=0,cc=0,m=0;
+  idx.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/idx.length*100);
+  html+='<div class="srow"><span class="name">'+c+'</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+idx.length+' mast.</span></div>'});
+ const qi=CARDS.map((_,i)=>i).filter(i=>CARDS[i].quiz);
+ if(qi.length){let a=0,cc=0,m=0;qi.forEach(i=>{const s=st(i);a+=attempts(s);cc+=s.good+s.easy;if(isMastered(i))m++});const pct=a?Math.round(cc/a*100):0,mp=Math.round(m/qi.length*100);
+  html+='<div class="srow"><span class="name">📝 Past Quiz</span><span class="track"><i style="width:'+mp+'%;background:'+barColor(pct,a)+'"></i></span><span class="num">'+m+'/'+qi.length+' mast.</span></div>'}
+ $("catStats").innerHTML=html;
+ const wrong=CARDS.map((c,i)=>({c,s:st(i),i})).filter(x=>x.s.again>0).sort((A,B)=>B.s.again-A.s.again);
+ $("wrongList").innerHTML=wrong.length?wrong.map(x=>{const t=(x.c.q||x.c.title).replace(/<[^>]+>/g,'');
+  return '<div class="wrongItem"><div>'+t+'<span class="pill" style="background:var(--red)">✗ '+x.s.again+'</span>'+(isMastered(x.i)?'<span class="pill" style="background:var(--green)">mastered</span>':'')+'</div><div class="meta">'+x.c.c+' · level '+x.s.lvl+' · '+TYPELABEL[x.c.t]+'</div></div>'}).join(""):'<div class="empty">Nothing yet — cards you rate “Again” collect here.</div>';
+ $("studyView").style.display="none";$("statsView").style.display="block"}
+function showStudy(){$("statsView").style.display="none";$("studyView").style.display="block";render()}
+function resetStats(){if(!confirm("Reset ALL progress? Can't be undone."))return;stats={};save();buildQueue();showStats()}
+
+document.addEventListener("keydown",e=>{
+ const typing=document.activeElement&&document.activeElement.tagName==='INPUT';
+ if(typing){if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c.t==='fill')checkFill();else if(c.t==='table')checkTable()}return}
+ if($("statsView").style.display==="block"){if(e.key.toLowerCase()==="t")showStudy();return}
+ if(e.code==="Space"){e.preventDefault();flip()}
+ else if(e.key==="Enter"){const c=CARDS[queue[pos]];if(c&&(c.t==='fill'||c.t==='table')&&!checked){/*focus first input*/const f=$("bi0");if(f)f.focus();}}
+ else if(e.code==="ArrowRight")next();else if(e.code==="ArrowLeft")prev();
+ else if(e.key==="1")grade('again');else if(e.key==="2")grade('hard');else if(e.key==="3")grade('good');else if(e.key==="4")grade('easy');
+ else if(e.key.toLowerCase()==="s")shuffle();else if(e.key.toLowerCase()==="t")showStats()});
+
+buildExamToggle();buildModeFilters();buildFilters();buildQueue();render();initSync();
+</script></body></html>

@@ -190,7 +190,8 @@ function buildModeFilters(){const f=$("modeFilters");f.innerHTML="";
  const mid=examMode==='midterm', has=t=>CARDS.some(c=>c.t===t);
  const avail=CARDS.filter(c=>!(mid&&(c.t==='fill'||c.t==='table'))).length;
  const mk=(l,k)=>{const e=document.createElement("span");e.className="chip mode"+(modeFilter===k?" active":"");e.textContent=l;e.onclick=()=>{modeFilter=k;buildQueue();buildModeFilters();render()};return e};
- f.appendChild(mk("All types ("+avail+")","ALL"));f.appendChild(mk("Q&A","qa"));
+ f.appendChild(mk("All types ("+avail+")","ALL"));
+ if(has('qa'))f.appendChild(mk("Q&A","qa"));
  if(has('mc'))f.appendChild(mk("📝 Quiz","mc"));
  if(!mid&&has('fill'))f.appendChild(mk("✏️ Fill-in","fill"));
  if(!mid&&has('table'))f.appendChild(mk("📊 Tables","table"));
@@ -242,7 +243,7 @@ function shuffleOpts(opts){const pin=[],free=[];
  for(let k=free.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[free[k],free[j]]=[free[j],free[k]]}
  return free.concat(pin)}
 function renderMC(c){
- if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=shuffleOpts(c.options);
+ if(!mcOrder||mcOrder.length!==c.options.length)mcOrder=c.noshuffle?c.options.map((_,i)=>i):shuffleOpts(c.options);
  let h='<div class="q" style="margin-bottom:12px">'+c.q+'</div><div class="mcopts">';
  mcOrder.forEach(oi=>{let cls='mcopt';
   if(checked){if(oi===c.ans)cls+=' mccorrect';else if(oi===curChoice)cls+=' mcwrong'}
