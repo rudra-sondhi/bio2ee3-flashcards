@@ -8,18 +8,18 @@ The site splits by exam. Pick your path from the landing page:
 
 | Path | Page | Status |
 |---|---|---|
-| 🎓 **Final Content** | [`final.html`](final.html) | **10 decks · 776 cards** |
+| 🎓 **Final Content** | [`final.html`](final.html) | **10 decks · 827 cards** |
 | 📝 **Midterm Content** | [`midterm.html`](midterm.html) | Archived — **not on the final** |
 
 ### Final decks (post-midterm — **this is what the final tests**)
 
 | Deck | Topic | Cards |
 |---|---|---|
-| 📋 **Exact Questions** | **The released questions verbatim — his wording, his options, his order, unshuffled** | **80** |
-| 📄 **Practice Exam** | **Both released quiz versions + the metabolism quiz, with gap-fixers** | **103** |
-| ⚡ **Final Cram** | **All 51 confirmed questions + the strongest "you need to know" items** | **152** |
+| 📋 **Exact Questions** | **The released questions verbatim — his wording, his options, his order, unshuffled** | **101** |
+| 📄 **Practice Exam** | **Both released quiz versions + the metabolism quiz, with gap-fixers** | **128** |
+| ⚡ **Final Cram** | **All 51 confirmed questions + the strongest "you need to know" items** | **153** |
 | Metabolism | Parts 1 & 2 — glycolysis, TCA, fermentation, energetics | 68 |
-| Microbial Ecosystems | Biofilms, rhizosphere, community analysis, habitats, bioremediation | 65 |
+| Microbial Ecosystems | Biofilms, rhizosphere, community analysis, habitats, bioremediation | 69 |
 | Chapter 7 | DNA Replication | 63 |
 | Chapter 8 | Transcription & Translation | 63 |
 | Chapter 9 | Regulation of Gene Expression | 58 |
